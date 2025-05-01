@@ -15,7 +15,7 @@ const logger = pino({
     env: process.env.NODE_ENV || "development",
   },
   // Use different transports based on environment
-  ...(process.env.NODE_ENV === "production"
+  ...(env.NODE_ENV === "production"
     ? {}
     : {
         transport: {
