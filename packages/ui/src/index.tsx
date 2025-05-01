@@ -6,4 +6,3 @@ export * from './Badge'
 export * from './Empty'
 export * from './LoadingSpinner'
 export * from './FileThumbnail'
-// Client components are exported from ./client
