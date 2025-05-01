@@ -29,6 +29,9 @@ importers:
       fastify:
         specifier: ^5.3.2
         version: 5.3.2
+      human-format:
+        specifier: ^1.2.1
+        version: 1.2.1
       kafkajs:
         specifier: ^2.2.4
         version: 2.2.4
@@ -324,6 +327,9 @@ importers:
       date-fns:
         specifier: ^2.30.0
         version: 2.30.0
+      human-format:
+        specifier: ^1.2.1
+        version: 1.2.1
       react:
         specifier: ^19
         version: 19.1.0
@@ -2101,6 +2107,10 @@ packages:
 
   help-me@5.0.0:
     resolution: {integrity: sha512-7xgomUX6ADmcYzFik0HzAxh/73YlKR9bmFzf51CZwR+b6YtzU2m0u49hQCqV6SvlqIqsaxovfwdvbnsw3b/zpg==}
+
+  human-format@1.2.1:
+    resolution: {integrity: sha512-o5Ldz62VWR5lYUZ8aVQaLKiN37NsHnmk3xjMoUjza3mGkk8MvMofgZT0T6HKSCKSJIir+AWk9Dx8KhxvZAUgCg==}
+    engines: {node: '>=4'}
 
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
@@ -5451,6 +5461,8 @@ snapshots:
       function-bind: 1.1.2
 
   help-me@5.0.0: {}
+
+  human-format@1.2.1: {}
 
   ignore@5.3.2: {}
 

@@ -1,4 +1,6 @@
 import { ChangeEvent, ReactNode, useCallback, useState } from "react";
+import clsx from "clsx";
+import humanFormat from "human-format";
 
 export interface FileUploadZoneProps {
   onFilesSelected: (files: File[]) => void;
@@ -23,11 +25,14 @@ export function FileUploadZone({
   const [error, setError] = useState<string | null>(null);
 
   const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+  const formattedMaxSize = humanFormat.bytes(maxSizeInBytes, {
+    separator: " ",
+  });
 
   const validateAndProcessFiles = useCallback(
     (fileList: FileList) => {
       setError(null);
-      let filesToUpload = Array.from(fileList);
+      const filesToUpload = Array.from(fileList);
 
       // Validate number of files
       if (maxFiles > 0 && filesToUpload.length > maxFiles) {
@@ -40,13 +45,13 @@ export function FileUploadZone({
         (file) => file.size > maxSizeInBytes
       );
       if (oversizedFiles.length > 0) {
-        setError(`File size exceeds ${maxSizeInMB}MB limit`);
+        setError(`File size exceeds ${formattedMaxSize} limit`);
         return;
       }
 
       onFilesSelected(filesToUpload);
     },
-    [maxFiles, maxSizeInBytes, maxSizeInMB, onFilesSelected]
+    [maxFiles, maxSizeInBytes, formattedMaxSize, onFilesSelected]
   );
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -84,13 +89,20 @@ export function FileUploadZone({
   );
 
   return (
-    <div className={`ui-w-full ${className}`}>
+    <div className={clsx("ui-w-full", className)}>
       <div
-        className={`ui-border-2 ui-border-dashed ui-rounded-lg ui-p-8 ui-transition-all ui-duration-200 ui-text-center ${
-          isDragging
-            ? "ui-border-blue-500 ui-bg-blue-50 ui-scale-[1.01] ui-shadow-sm"
-            : "ui-border-gray-300 ui-bg-gray-50 hover:ui-border-gray-400 hover:ui-bg-gray-100"
-        } ${disabled ? "ui-opacity-60 ui-cursor-not-allowed ui-pointer-events-none" : "ui-cursor-pointer"}`}
+        className={clsx(
+          "ui-border-2 ui-border-dashed ui-rounded-lg ui-p-8 ui-transition-all ui-duration-200 ui-text-center",
+          {
+            "ui-border-blue-500 ui-bg-blue-50 ui-scale-[1.01] ui-shadow-sm":
+              isDragging,
+            "ui-border-gray-300 ui-bg-gray-50 hover:ui-border-gray-400 hover:ui-bg-gray-100":
+              !isDragging,
+            "ui-opacity-60 ui-cursor-not-allowed ui-pointer-events-none":
+              disabled,
+            "ui-cursor-pointer": !disabled,
+          }
+        )}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -106,9 +118,13 @@ export function FileUploadZone({
         />
         <label
           htmlFor="fileInput"
-          className={`ui-flex ui-flex-col ui-items-center ui-justify-center ui-space-y-3 ${
-            disabled ? "ui-cursor-not-allowed" : "ui-cursor-pointer"
-          }`}
+          className={clsx(
+            "ui-flex ui-flex-col ui-items-center ui-justify-center ui-space-y-3",
+            {
+              "ui-cursor-not-allowed": disabled,
+              "ui-cursor-pointer": !disabled,
+            }
+          )}
         >
           {children || (
             <>
@@ -134,7 +150,7 @@ export function FileUploadZone({
               </p>
               <p className="ui-text-xs ui-text-gray-500">
                 {maxFiles > 0 ? `Up to ${maxFiles} files` : "Multiple files"}{" "}
-                &bull; {maxSizeInMB}MB max
+                &bull; {formattedMaxSize} max
               </p>
             </>
           )}

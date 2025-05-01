@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { format } from "date-fns";
 import clsx from "clsx";
+import humanFormat from "human-format";
 import { FileThumbnail } from "./FileThumbnail";
 
 export interface FileCardProps {
@@ -26,19 +27,14 @@ export function FileCard({
 }: FileCardProps) {
   const formatFileSize = (bytes?: number) => {
     if (!bytes) return "Unknown size";
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    return humanFormat.bytes(bytes, { separator: " " });
   };
 
   const formatDate = (date?: Date | string) => {
     if (!date) return "";
-    const dateObj = typeof date === "string" ? new Date(date) : date;
-    try {
-      return format(dateObj, "MMM d, yyyy");
-    } catch (error) {
-      return "Invalid date";
-    }
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return "Invalid date";
+    return format(d, "MMM d, yyyy");
   };
 
   return (

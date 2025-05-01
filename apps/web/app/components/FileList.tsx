@@ -1,31 +1,16 @@
 'use client'
 
 import { trpc } from '@file-uploader/trpc/client'
-import { format } from 'date-fns'
-import clsx from 'clsx'
 import {
-  Card,
-  CardHeader,
-  CardContent,
-  FileCard,
-  Empty,
+  Badge,
   Button,
-  Badge
+  Card,
+  CardContent,
+  CardHeader,
+  Empty,
+  FileCard
 } from '@repo/ui'
-
-interface File {
-  id: string
-  name: string
-  size: number
-  type?: string
-  mimeType: string
-  createdAt: Date
-  updatedAt: Date
-  url: string
-  s3Key: string
-  originalName: string
-  status: string
-}
+import clsx from 'clsx'
 
 export function FileList() {
   // Example of using tRPC client query
@@ -48,9 +33,13 @@ export function FileList() {
   const renderContent = () => {
     if (filesQuery.isLoading) {
       return (
-        <div className='ui-py-8 ui-text-center ui-text-gray-500 ui-animate-pulse ui-flex ui-flex-col ui-items-center'>
+        <div
+          className={clsx(
+            'ui-py-8 ui-text-center ui-text-gray-500 ui-animate-pulse ui-flex ui-flex-col ui-items-center'
+          )}
+        >
           <svg
-            className='ui-w-10 ui-h-10 ui-mb-4 ui-text-blue-300'
+            className={clsx('ui-w-10 ui-h-10 ui-mb-4 ui-text-blue-300')}
             xmlns='http://www.w3.org/2000/svg'
             viewBox='0 0 24 24'
             fill='none'
@@ -70,9 +59,13 @@ export function FileList() {
 
     if (filesQuery.isError) {
       return (
-        <div className='ui-py-6 ui-text-center ui-text-red-500 ui-bg-red-50 ui-rounded-lg ui-border ui-border-red-100'>
+        <div
+          className={clsx(
+            'ui-py-6 ui-text-center ui-text-red-500 ui-bg-red-50 ui-rounded-lg ui-border ui-border-red-100'
+          )}
+        >
           <svg
-            className='ui-w-8 ui-h-8 ui-mx-auto ui-mb-3 ui-text-red-400'
+            className={clsx('ui-w-8 ui-h-8 ui-mx-auto ui-mb-3 ui-text-red-400')}
             xmlns='http://www.w3.org/2000/svg'
             viewBox='0 0 24 24'
             fill='none'
@@ -85,8 +78,10 @@ export function FileList() {
             <line x1='12' y1='8' x2='12' y2='12'></line>
             <line x1='12' y1='16' x2='12.01' y2='16'></line>
           </svg>
-          <p className='ui-font-medium'>Error loading files</p>
-          <p className='ui-text-sm ui-mt-1'>{filesQuery.error.message}</p>
+          <p className={clsx('ui-font-medium')}>Error loading files</p>
+          <p className={clsx('ui-text-sm ui-mt-1')}>
+            {filesQuery.error.message}
+          </p>
         </div>
       )
     }
@@ -99,9 +94,13 @@ export function FileList() {
           title='No files yet'
           description='Upload some files to see them listed here.'
           action={
-            <div className='ui-flex ui-items-center ui-justify-center ui-text-sm ui-text-gray-500 ui-mt-2'>
+            <div
+              className={clsx(
+                'ui-flex ui-items-center ui-justify-center ui-text-sm ui-text-gray-500 ui-mt-2'
+              )}
+            >
               <svg
-                className='ui-w-5 ui-h-5 ui-mr-2 ui-text-gray-400'
+                className={clsx('ui-w-5 ui-h-5 ui-mr-2 ui-text-gray-400')}
                 xmlns='http://www.w3.org/2000/svg'
                 viewBox='0 0 24 24'
                 fill='none'
@@ -122,7 +121,7 @@ export function FileList() {
     }
 
     return (
-      <div className='ui-space-y-3'>
+      <div className={clsx('ui-space-y-3')}>
         {files.map((file) => (
           <FileCard
             key={file.id}
@@ -131,7 +130,7 @@ export function FileList() {
             fileType={file.mimeType}
             uploadDate={file.createdAt}
             actions={
-              <div className='ui-flex ui-gap-6'>
+              <div className={clsx('ui-flex ui-gap-6')}>
                 <Button
                   variant='outline'
                   size='sm'
@@ -156,16 +155,20 @@ export function FileList() {
   }
 
   return (
-    <Card className='ui-transform ui-transition-all ui-duration-300 hover:ui-shadow-lg'>
+    <Card
+      className={clsx(
+        'ui-transform ui-transition-all ui-duration-300 hover:ui-shadow-lg'
+      )}
+    >
       <CardHeader
         title='Your Files'
         subtitle='Manage your uploaded files'
         action={
           filesQuery.data &&
           filesQuery.data.length > 0 && (
-            <div className='ui-flex ui-items-center'>
+            <div className={clsx('ui-flex ui-items-center')}>
               <svg
-                className='ui-w-4 ui-h-4 ui-mr-1 ui-text-blue-500'
+                className={clsx('ui-w-4 ui-h-4 ui-mr-1 ui-text-blue-500')}
                 xmlns='http://www.w3.org/2000/svg'
                 viewBox='0 0 24 24'
                 fill='none'
@@ -188,7 +191,7 @@ export function FileList() {
           )
         }
       />
-      <CardContent className='ui-p-5'>{renderContent()}</CardContent>
+      <CardContent className={clsx('ui-p-5')}>{renderContent()}</CardContent>
     </Card>
   )
 }

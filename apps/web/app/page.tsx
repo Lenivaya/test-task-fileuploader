@@ -1,6 +1,5 @@
-import { FileUploader } from './components/FileUploader'
 import { FileList } from './components/FileList'
-import clsx from 'clsx'
+import { FileUploader } from './components/FileUploader'
 
 export default function Page() {
   return (
