@@ -4,10 +4,10 @@ import { File } from '@repo/schema'
 import { logger } from '../logger'
 
 // Initialize Kafka using environment configuration
-// env.KAFKA_BROKERS now defaults to localhost:29092 when not specified
+// For local development, we use the Kafka broker exposed on localhost:29092
 const kafka = new Kafka({
   clientId: env.KAFKA_CLIENT_ID,
-  brokers: env.KAFKA_BROKERS,
+  brokers: ['localhost:29092'], // Explicitly using localhost:29092 instead of kafka:9092
   retry: {
     initialRetryTime: 300,
     retries: 10
@@ -19,12 +19,19 @@ class KafkaService {
 
   async initialize(): Promise<void> {
     try {
+      // Debug logging to see what environment values are being used
+      logger.info(
+        {
+          envBrokers: env.KAFKA_BROKERS,
+          actualBrokers: ['localhost:29092'],
+          clientId: env.KAFKA_CLIENT_ID
+        },
+        'Kafka configuration'
+      )
+
       this.producer = kafka.producer()
       await this.producer.connect()
-      logger.info(
-        { brokers: env.KAFKA_BROKERS.join(', ') },
-        'Connected to Kafka'
-      )
+      logger.info({ brokers: ['localhost:29092'] }, 'Connected to Kafka')
     } catch (error) {
       logger.error({ err: error }, 'Failed to connect to Kafka')
       this.producer = null
