@@ -10,7 +10,7 @@ A mini-platform for managing files, built with a modern stack:
 ## Features
 
 - Upload files to S3-compatible storage with a modern UI
-- Multiple file upload support with progress tracking
+- Multiple file upload support with real-time progress tracking
 - List and manage files stored in the database
 - Delete files (removes from both database and S3)
 - Kafka events publishing for file uploads
@@ -22,9 +22,9 @@ This is a monorepo built with Turborepo and pnpm, containing:
 
 - `/apps/api`: Backend API service with Fastify, tRPC, and Prisma
 - `/apps/web`: Frontend web application with Next.js, React, and Tailwind CSS
-- `/packages/schema`: Shared schemas and types using Zod
-- `/packages/trpc`: tRPC routers and procedures
-- `/packages/ui`: Shared UI components
+- `/packages/schema`: Shared schemas and types using Zod for validation
+- `/packages/trpc`: tRPC routers, procedures, and services for API endpoints and background jobs
+- `/packages/ui`: Shared UI components including FileUploadZone, Cards, Buttons, and more
 - `/packages/eslint-config`: Shared ESLint configuration
 - `/packages/tailwind-config`: Shared Tailwind configuration
 - `/packages/typescript-config`: Shared TypeScript configuration
@@ -72,10 +72,14 @@ This will start both the backend API and the frontend web application in develop
 
 The API is exposed through tRPC and includes:
 
-- `file.getFiles`: Get all files
-- `file.uploadFile`: Upload a single file
-- `file.deleteFile`: Delete a file
-- `files.uploadFiles`: Upload multiple files
+- `file.getFiles`: Get all files with metadata
+- `file.uploadFile`: Upload a single file to S3 and database
+- `file.deleteFile`: Delete a file from both S3 and database
+- `files.uploadFiles`: Upload multiple files simultaneously
+
+## Background Jobs
+
+- `syncS3Files`: Ensures synchronization between S3 storage and database, removing orphaned files from S3
 
 ## Development
 
