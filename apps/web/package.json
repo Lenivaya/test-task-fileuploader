@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@file-uploader/web",
   "version": "1.0.0",
   "type": "module",
   "private": true,
@@ -12,7 +12,7 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,hbs}\""
   },
   "dependencies": {
-    "@repo/ui": "workspace:*",
+    "@file-uploader/ui": "workspace:*",
     "@t3-oss/env-nextjs": "^0.13.4",
     "@tanstack/react-query": "^5.74.11",
     "@trpc/client": "^11.1.2",
@@ -27,9 +27,9 @@
   "devDependencies": {
     "@file-uploader/trpc": "workspace:*",
     "@next/eslint-plugin-next": "^15.3.0",
-    "@repo/eslint-config": "workspace:*",
+    "@file-uplodader/eslint-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@file-uploader/typescript-config": "workspace:*",
     "@types/node": "^22.15.3",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.1",

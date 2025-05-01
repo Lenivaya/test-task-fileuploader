@@ -1,4 +1,4 @@
-import { File } from '@repo/schema'
+import { File } from '@file-uploader/schema'
 import { z } from 'zod'
 import { logger } from '../logger'
 import prisma from '../prisma'

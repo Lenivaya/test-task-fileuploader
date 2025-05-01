@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "@file-uploader/api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -15,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@file-uploader/typescript-config": "workspace:*",
     "@types/node": "^22.15.3",
     "prettier": "^3.5.3",
     "prettier-config-standard": "^7.0.0",
@@ -28,7 +28,7 @@
     "@file-uploader/trpc": "workspace:*",
     "@prisma/adapter-pg": "^6.7.0",
     "@prisma/client": "6.7.0",
-    "@repo/schema": "workspace:*",
+    "@file-uploader/schema": "workspace:*",
     "@t3-oss/env-core": "^0.13.4",
     "@trpc/client": "11.1.2",
     "@trpc/server": "11.1.2",

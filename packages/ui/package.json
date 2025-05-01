@@ -1,5 +1,5 @@
 {
-  "name": "@repo/ui",
+  "name": "@file-uploader/ui",
   "version": "0.0.0",
   "sideEffects": [
     "**/*.css"
@@ -30,9 +30,9 @@
     "human-format": "^1.2.1"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
+    "@file-uplodader/eslint-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@file-uploader/typescript-config": "workspace:*",
     "@types/date-fns": "^2.6.3",
     "@types/node": "^22.15.3",
     "@types/react": "^19.1.0",

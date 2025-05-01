@@ -1,4 +1,4 @@
-import { createFileSchema, deleteFileSchema } from '@repo/schema'
+import { createFileSchema, deleteFileSchema } from '@file-uploader/schema'
 import { TRPCError } from '@trpc/server'
 import { logger } from '../logger'
 import prisma from '../prisma'

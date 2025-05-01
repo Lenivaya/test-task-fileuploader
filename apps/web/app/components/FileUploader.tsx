@@ -1,7 +1,13 @@
 'use client'
 
 import { trpc } from '@file-uploader/trpc/client'
-import { Button, Card, CardContent, CardHeader, FileUploadZone } from '@repo/ui'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  FileUploadZone
+} from '@file-uploader/ui'
 import { useState } from 'react'
 
 export function FileUploader() {

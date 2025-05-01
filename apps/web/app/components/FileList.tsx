@@ -9,7 +9,7 @@ import {
   CardHeader,
   Empty,
   FileCard
-} from '@repo/ui'
+} from '@file-uploader/ui'
 import clsx from 'clsx'
 
 export function FileList() {

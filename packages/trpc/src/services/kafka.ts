@@ -1,6 +1,6 @@
 import { Kafka, Producer } from 'kafkajs'
 import { env } from '../env'
-import { File } from '@repo/schema'
+import { File } from '@file-uploader/schema'
 import { logger } from '../logger'
 
 // Initialize Kafka using environment configuration

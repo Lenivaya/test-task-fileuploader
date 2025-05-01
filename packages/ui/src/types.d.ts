@@ -1,4 +1,4 @@
-declare module "@repo/ui" {
+declare module "@file-uploader/ui" {
   export * from "./Button";
   export * from "./Card";
   export * from "./FileUploadZone";
