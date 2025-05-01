@@ -65,12 +65,12 @@ docker compose up -d
 5. Generate Prisma client (if changed models, in other cases may be omitted):
 
 ```bash
-cd apps/api
+cd packages/trpc
 pnpm prisma generate
 pnpm prisma db push
 ```
 
-6. Start the development server:
+6. Start the development server (from the root directory):
 
 ```bash
 pnpm dev
