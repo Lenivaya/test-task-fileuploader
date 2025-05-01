@@ -1,8 +1,11 @@
 import { initTRPC } from '@trpc/server'
 import { logger } from '../logger'
+import superjson from 'superjson'
 
 // Initialize tRPC
-const t = initTRPC.create()
+const t = initTRPC.create({
+  transformer: superjson
+})
 
 // Create logging middleware
 const loggerMiddleware = t.middleware(async ({ path, type, next }) => {

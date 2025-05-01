@@ -2,8 +2,9 @@
 
 import { trpc } from '@file-uploader/trpc/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { httpBatchLink, httpLink } from '@trpc/client'
+import { httpLink } from '@trpc/client'
 import { useState } from 'react'
+import superjson from 'superjson'
 import { env } from '../env'
 
 export function TRPCProvider({ children }: { children: React.ReactNode }) {
@@ -12,6 +13,7 @@ export function TRPCProvider({ children }: { children: React.ReactNode }) {
     trpc.createClient({
       links: [
         httpLink({
+          transformer: superjson,
           url: `${env.NEXT_PUBLIC_API_URL}/trpc`,
           // Optional: When using in a browser, you can include credentials
           fetch(url, options) {
