@@ -2,14 +2,11 @@ import { Kafka, Producer } from "kafkajs";
 import { env } from "../env";
 import { File } from "@repo/schema";
 
-// Use localhost:29092 directly since we're running outside the Docker network
-// This matches the PLAINTEXT_HOST listener in docker-compose.yml
-const kafkaBrokers = ["localhost:29092"];
-
-// Initialize Kafka
+// Initialize Kafka using environment configuration
+// env.KAFKA_BROKERS now defaults to localhost:29092 when not specified
 const kafka = new Kafka({
-  clientId: env.KAFKA_CLIENT_ID || "file-uploader",
-  brokers: kafkaBrokers,
+  clientId: env.KAFKA_CLIENT_ID,
+  brokers: env.KAFKA_BROKERS,
   retry: {
     initialRetryTime: 300,
     retries: 10,
@@ -23,7 +20,7 @@ class KafkaService {
     try {
       this.producer = kafka.producer();
       await this.producer.connect();
-      console.log("Connected to Kafka at", kafkaBrokers.join(", "));
+      console.log("Connected to Kafka at", env.KAFKA_BROKERS.join(", "));
     } catch (error) {
       console.error("Failed to connect to Kafka:", error);
       this.producer = null;
