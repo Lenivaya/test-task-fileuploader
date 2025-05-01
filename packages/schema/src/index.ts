@@ -33,7 +33,9 @@ export type FileInput = z.infer<typeof fileInputSchema>;
 // Schema for creating a new file
 export const createFileSchema = z.object({
   name: z.string().min(1),
-  file: fileInputSchema,
+  content: z.string(), // Base64 encoded file content
+  size: z.number().int().positive(),
+  type: z.string(), // MIME type
 });
 
 export type CreateFileInput = z.infer<typeof createFileSchema>;

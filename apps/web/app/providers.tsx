@@ -2,7 +2,7 @@
 
 import { trpc } from '@file-uploader/trpc/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { httpBatchLink } from '@trpc/client'
+import { httpBatchLink, httpLink } from '@trpc/client'
 import { useState } from 'react'
 import { env } from '../env'
 
@@ -11,7 +11,7 @@ export function TRPCProvider({ children }: { children: React.ReactNode }) {
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
-        httpBatchLink({
+        httpLink({
           url: `${env.NEXT_PUBLIC_API_URL}/trpc`,
           // Optional: When using in a browser, you can include credentials
           fetch(url, options) {

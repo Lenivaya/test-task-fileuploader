@@ -28,41 +28,44 @@ export const fileRouter = router({
   uploadFile: publicProcedure
     .input(createFileSchema)
     .mutation(async ({ input }) => {
-      const { name, file } = input
+      const { name, content, size, type } = input
       const timestamp = Date.now()
-      const s3Key = `${timestamp}-${file.originalname.replace(/\s+/g, '-')}`
+      const originalname = name
+      const s3Key = `${timestamp}-${originalname.replace(/\s+/g, '-')}`
 
       try {
-        // Upload to S3
-        if (!file.buffer) {
-          logger.warn({ name }, 'File buffer is missing')
+        // Convert base64 to buffer
+        const buffer = Buffer.from(content, 'base64')
+
+        if (!buffer.length) {
+          logger.warn({ name }, 'File buffer is empty')
           throw new TRPCError({
             code: 'BAD_REQUEST',
-            message: 'File buffer is required'
+            message: 'File content is required'
           })
         }
 
         logger.debug(
-          { name, originalName: file.originalname },
+          { name, originalName: originalname },
           'Uploading file to S3'
         )
-        const url = await uploadFileToS3(s3Key, file.buffer, file.mimetype)
+        const url = await uploadFileToS3(s3Key, buffer, type)
 
         // Save to database
         const newFile = await prisma.file.create({
           data: {
             name,
-            originalName: file.originalname,
+            originalName: originalname,
             url,
             s3Key,
-            size: file.size,
-            mimeType: file.mimetype,
+            size,
+            mimeType: type,
             status: 'READY'
           }
         })
 
         logger.info(
-          { fileId: newFile.id, name, size: file.size },
+          { fileId: newFile.id, name, size },
           'File uploaded successfully'
         )
 
@@ -71,10 +74,7 @@ export const fileRouter = router({
 
         return newFile
       } catch (error) {
-        logger.error(
-          { err: error, name, originalName: file.originalname },
-          'Error uploading file'
-        )
+        logger.error({ err: error, name }, 'Error uploading file')
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to upload file'
