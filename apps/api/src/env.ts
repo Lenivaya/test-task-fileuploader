@@ -11,7 +11,10 @@ export const env = createEnv({
     S3_SECRET_KEY: z.string().min(1),
     S3_BUCKET_NAME: z.string().min(1),
     // Kafka Configuration
-    KAFKA_BROKERS: z.string().transform((val) => val.split(",")),
+    KAFKA_BROKERS: z
+      .string()
+      .default("localhost:29092")
+      .transform((val) => val.split(",")),
     KAFKA_CLIENT_ID: z.string().default("file-uploader"),
     // Server Configuration
     HOST: z.string().default("0.0.0.0"),
