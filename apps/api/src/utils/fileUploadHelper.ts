@@ -2,6 +2,7 @@ import { FastifyRequest } from "fastify";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { env } from "../env";
 import { Readable } from "stream";
+import { logger } from "../logger";
 
 // Initialize S3 client
 const s3Client = new S3Client({
@@ -26,6 +27,11 @@ export async function uploadFileWithProgress(
   buffer: Buffer,
   contentType: string
 ): Promise<string> {
+  logger.debug(
+    { fileId, key, size: buffer.length },
+    "Starting file upload with progress tracking"
+  );
+
   // Create a readable stream from the buffer
   const readable = Readable.from(buffer);
 
@@ -43,17 +49,25 @@ export async function uploadFileWithProgress(
 
   // Add upload progress listener
   command.middlewareStack.add(
-    (next) => async (args) => {
-      if (args.request.body instanceof Readable) {
+    (next) => async (args: any) => {
+      if (args.request && args.request.body instanceof Readable) {
         const stream = args.request.body;
 
         let loaded = 0;
-        stream.on("data", (chunk) => {
+        stream.on("data", (chunk: Buffer) => {
           loaded += chunk.length;
           const progress = uploadProgress.get(fileId);
           if (progress) {
             progress.loaded = loaded;
             uploadProgress.set(fileId, { ...progress });
+            // Only log progress at key points to avoid excessive logging
+            if (loaded === total || loaded % Math.floor(total / 10) === 0) {
+              const percent = Math.round((loaded / total) * 100);
+              logger.trace(
+                { fileId, progress: percent },
+                "Upload progress update"
+              );
+            }
           }
         });
       }
@@ -64,6 +78,7 @@ export async function uploadFileWithProgress(
   );
 
   await s3Client.send(command);
+  logger.debug({ fileId, key }, "File upload with progress tracking completed");
 
   // Generate a public URL for the file
   const fileUrl = `${env.S3_ENDPOINT}/${env.S3_BUCKET_NAME}/${key}`;
@@ -78,8 +93,10 @@ export function getUploadProgress(fileId: string): { progress: number } | null {
   if (!progress) return null;
 
   const { total, loaded } = progress;
+  const progressPercent = Math.min(Math.round((loaded / total) * 100), 100);
+
   return {
-    progress: Math.min(Math.round((loaded / total) * 100), 100),
+    progress: progressPercent,
   };
 }
 
@@ -87,5 +104,6 @@ export function getUploadProgress(fileId: string): { progress: number } | null {
  * Clean up progress tracking for a file
  */
 export function cleanupProgress(fileId: string): void {
+  logger.debug({ fileId }, "Cleaning up upload progress tracking");
   uploadProgress.delete(fileId);
 }

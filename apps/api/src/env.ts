@@ -23,6 +23,10 @@ export const env = createEnv({
       .transform(Number)
       .pipe(z.number().int().positive())
       .default("3001"),
+
+    LOG_LEVEL: z
+      .enum(["fatal", "error", "warn", "info", "debug", "trace"])
+      .default("info"),
   },
 
   /**

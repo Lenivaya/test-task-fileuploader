@@ -1,6 +1,7 @@
 import { Kafka, Producer } from "kafkajs";
 import { env } from "../env";
 import { File } from "@repo/schema";
+import { logger } from "../logger";
 
 // Initialize Kafka using environment configuration
 // env.KAFKA_BROKERS now defaults to localhost:29092 when not specified
@@ -20,16 +21,19 @@ class KafkaService {
     try {
       this.producer = kafka.producer();
       await this.producer.connect();
-      console.log("Connected to Kafka at", env.KAFKA_BROKERS.join(", "));
+      logger.info(
+        { brokers: env.KAFKA_BROKERS.join(", ") },
+        "Connected to Kafka"
+      );
     } catch (error) {
-      console.error("Failed to connect to Kafka:", error);
+      logger.error({ err: error }, "Failed to connect to Kafka");
       this.producer = null;
     }
   }
 
   async publishFileUploaded(file: File): Promise<void> {
     if (!this.producer) {
-      console.warn("Kafka producer not initialized, skipping message");
+      logger.warn("Kafka producer not initialized, skipping message");
       return;
     }
 
@@ -43,15 +47,19 @@ class KafkaService {
           },
         ],
       });
-      console.log(`Published file_uploaded event for file ID: ${file.id}`);
+      logger.info({ fileId: file.id }, "Published file_uploaded event");
     } catch (error) {
-      console.error("Failed to publish Kafka message:", error);
+      logger.error(
+        { err: error, fileId: file.id },
+        "Failed to publish Kafka message"
+      );
     }
   }
 
   async disconnect(): Promise<void> {
     if (this.producer) {
       await this.producer.disconnect();
+      logger.info("Disconnected from Kafka");
       this.producer = null;
     }
   }

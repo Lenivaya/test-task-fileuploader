@@ -5,6 +5,7 @@ import {
 } from "@aws-sdk/client-s3";
 import prisma from "../prisma";
 import { env } from "../env";
+import { logger } from "../logger";
 
 // Initialize S3 client
 const s3Client = new S3Client({
@@ -23,38 +24,44 @@ const s3Client = new S3Client({
  * If not, it deletes them from S3
  */
 export async function syncS3Files(): Promise<void> {
-  console.log("Starting S3 file synchronization job");
+  logger.info("Starting S3 file synchronization job");
 
   try {
     // Get all files from S3
     const s3Files = await listAllS3Objects(env.S3_BUCKET_NAME);
-    console.log(`Found ${s3Files.length} files in S3`);
+    logger.info({ fileCount: s3Files.length }, "Found files in S3");
 
     // Get all S3 keys from database
     const dbFiles = await prisma.file.findMany({
       select: { s3Key: true },
     });
     const dbKeys = new Set(dbFiles.map((file) => file.s3Key));
-    console.log(`Found ${dbKeys.size} files in database`);
+    logger.info({ fileCount: dbKeys.size }, "Found files in database");
 
     // Find files that exist in S3 but not in the database
     const orphanedFiles = s3Files.filter((key) => !dbKeys.has(key));
-    console.log(`Found ${orphanedFiles.length} orphaned files in S3`);
+    logger.info(
+      { fileCount: orphanedFiles.length },
+      "Found orphaned files in S3"
+    );
 
     // Delete orphaned files from S3
     if (orphanedFiles.length > 0) {
       for (const key of orphanedFiles) {
-        console.log(`Deleting orphaned file: ${key}`);
+        logger.debug({ key }, "Deleting orphaned file");
         await deleteS3Object(env.S3_BUCKET_NAME, key);
       }
-      console.log(`Deleted ${orphanedFiles.length} orphaned files from S3`);
+      logger.info(
+        { fileCount: orphanedFiles.length },
+        "Deleted orphaned files from S3"
+      );
     } else {
-      console.log("No orphaned files found");
+      logger.info("No orphaned files found");
     }
 
-    console.log("S3 file synchronization completed successfully");
+    logger.info("S3 file synchronization completed successfully");
   } catch (error) {
-    console.error("Error during S3 file synchronization:", error);
+    logger.error({ err: error }, "Error during S3 file synchronization");
   }
 }
 
