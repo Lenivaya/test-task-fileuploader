@@ -115,18 +115,17 @@ export function FileUploadZone({
   );
 
   return (
-    <div className={clsx("ui-w-full", className)}>
+    <div className={clsx("w-full", className)}>
       <div
         className={clsx(
-          "ui-border-2 ui-border-dashed ui-rounded-lg ui-p-6 ui-transition-all ui-duration-200 ui-text-center",
+          "border-2 border-dashed rounded-lg p-6 transition-all duration-200 text-center",
           {
-            "ui-border-blue-500 ui-bg-blue-50 ui-scale-[1.01] ui-shadow-sm":
-              isDragging,
-            "ui-border-gray-300 ui-bg-gray-50 hover:ui-border-gray-400 hover:ui-bg-gray-100":
+            "border-blue-500 bg-blue-50 scale-[1.01] shadow-sm": isDragging,
+            "border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-gray-100":
               !isDragging,
-            "ui-opacity-60 ui-cursor-not-allowed ui-pointer-events-none":
+            "opacity-60 cursor-not-allowed pointer-events-none":
               disabled || isUploading,
-            "ui-cursor-pointer": !disabled && !isUploading,
+            "cursor-pointer": !disabled && !isUploading,
           }
         )}
         onDragOver={handleDragOver}
@@ -136,7 +135,7 @@ export function FileUploadZone({
         <input
           type="file"
           id="fileInput"
-          className="ui-hidden"
+          className="hidden"
           onChange={handleFileChange}
           multiple={maxFiles !== 1}
           accept={acceptedFileTypes}
@@ -145,25 +144,25 @@ export function FileUploadZone({
         <label
           htmlFor="fileInput"
           className={clsx(
-            "ui-flex ui-flex-col ui-items-center ui-justify-center ui-space-y-3",
+            "flex flex-col items-center justify-center space-y-3",
             {
-              "ui-cursor-not-allowed": disabled || isUploading,
-              "ui-cursor-pointer": !disabled && !isUploading,
+              "cursor-not-allowed": disabled || isUploading,
+              "cursor-pointer": !disabled && !isUploading,
             }
           )}
         >
           {children || (
             <>
-              <div className="ui-w-16 ui-h-16 ui-flex ui-items-center ui-justify-center ui-bg-blue-50 ui-text-blue-600 ui-rounded-full ui-mb-3">
+              <div className="w-16 h-16 flex items-center justify-center bg-blue-50 text-blue-600 rounded-full mb-3">
                 {isUploading ? (
                   <svg
-                    className="ui-w-8 ui-h-8 ui-animate-spin"
+                    className="w-8 h-8 animate-spin"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                   >
                     <circle
-                      className="ui-opacity-25"
+                      className="opacity-25"
                       cx="12"
                       cy="12"
                       r="10"
@@ -171,14 +170,14 @@ export function FileUploadZone({
                       strokeWidth="4"
                     ></circle>
                     <path
-                      className="ui-opacity-75"
+                      className="opacity-75"
                       fill="currentColor"
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
                 ) : (
                   <svg
-                    className="ui-w-8 ui-h-8"
+                    className="w-8 h-8"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -193,19 +192,17 @@ export function FileUploadZone({
                   </svg>
                 )}
               </div>
-              <p className="ui-text-sm ui-font-medium ui-text-gray-700">
+              <p className="text-sm font-medium text-gray-700">
                 {isUploading ? (
                   "Uploading files..."
                 ) : (
                   <>
                     Drag files here or{" "}
-                    <span className="ui-text-blue-600 ui-underline">
-                      browse
-                    </span>
+                    <span className="text-blue-600 underline">browse</span>
                   </>
                 )}
               </p>
-              <p className="ui-text-xs ui-text-gray-500">
+              <p className="text-xs text-gray-500">
                 {maxFiles > 0 ? `Up to ${maxFiles} files` : "Multiple files"}{" "}
                 &bull; {formattedMaxSize} max
               </p>
@@ -215,9 +212,9 @@ export function FileUploadZone({
       </div>
 
       {error && (
-        <div className="ui-flex ui-items-center ui-mt-3 ui-text-sm ui-text-red-600">
+        <div className="flex items-center mt-3 text-sm text-red-600">
           <svg
-            className="ui-w-4 ui-h-4 ui-mr-1.5 ui-flex-shrink-0"
+            className="w-4 h-4 mr-1.5 flex-shrink-0"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
@@ -233,8 +230,8 @@ export function FileUploadZone({
       )}
 
       {selectedFiles.length > 0 && (
-        <div className="ui-mt-4 ui-bg-white ui-border ui-border-gray-200 ui-rounded-lg ui-shadow-sm ui-overflow-hidden ui-transition-all ui-duration-300 ui-ease-in-out">
-          <ul className="ui-divide-y ui-divide-gray-200">
+        <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 ease-in-out">
+          <ul className="divide-y divide-gray-200">
             {selectedFiles.map((file, index) => {
               const fileProgress = progress[file.name] || 0;
               const isComplete = fileProgress === 100;
@@ -242,29 +239,29 @@ export function FileUploadZone({
               return (
                 <li
                   key={`${file.name}-${index}`}
-                  className="ui-relative ui-flex ui-items-center ui-py-3 ui-px-4 ui-bg-white ui-hover:bg-gray-50 ui-transition-all ui-duration-300 ui-transform ui-translate-y-0 hover:ui-translate-y-0 ui-opacity-100"
+                  className="relative flex items-center py-3 px-4 bg-white hover:bg-gray-50 transition-all duration-300 transform translate-y-0 hover:translate-y-0 opacity-100"
                 >
                   {isUploading && (
                     <div
                       className={clsx(
-                        "ui-absolute ui-inset-0 ui-opacity-30 ui-transition-all ui-duration-300 ui-ease-out",
-                        isComplete ? "ui-bg-green-50" : "ui-bg-blue-50"
+                        "absolute inset-0 opacity-30 transition-all duration-300 ease-out",
+                        isComplete ? "bg-green-50" : "bg-blue-50"
                       )}
                       style={{ width: `${fileProgress}%` }}
                     />
                   )}
-                  <div className="ui-relative ui-z-10 ui-flex ui-items-center ui-w-full">
+                  <div className="relative z-10 flex items-center w-full">
                     <div
                       className={clsx(
-                        "ui-w-10 ui-h-10 ui-flex-shrink-0 ui-flex ui-items-center ui-justify-center ui-rounded",
+                        "w-10 h-10 flex-shrink-0 flex items-center justify-center rounded",
                         isComplete
-                          ? "ui-bg-green-50 ui-text-green-500"
-                          : "ui-bg-blue-50 ui-text-blue-500"
+                          ? "bg-green-50 text-green-500"
+                          : "bg-blue-50 text-blue-500"
                       )}
                     >
                       {isComplete ? (
                         <svg
-                          className="ui-w-5 ui-h-5"
+                          className="w-5 h-5"
                           fill="currentColor"
                           viewBox="0 0 20 20"
                           xmlns="http://www.w3.org/2000/svg"
@@ -277,7 +274,7 @@ export function FileUploadZone({
                         </svg>
                       ) : (
                         <svg
-                          className="ui-w-5 ui-h-5"
+                          className="w-5 h-5"
                           fill="currentColor"
                           viewBox="0 0 20 20"
                           xmlns="http://www.w3.org/2000/svg"
@@ -290,22 +287,20 @@ export function FileUploadZone({
                         </svg>
                       )}
                     </div>
-                    <div className="ui-ml-3 ui-flex-1 ui-min-w-0">
-                      <p className="ui-text-sm ui-font-medium ui-text-gray-900 ui-truncate">
+                    <div className="ml-3 flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900 truncate">
                         {file.name}
                       </p>
-                      <div className="ui-flex ui-items-center ui-justify-between">
-                        <p className="ui-text-xs ui-text-gray-500">
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs text-gray-500">
                           {humanFormat.bytes(file.size, { separator: " " })} •{" "}
                           {file.type || "Unknown type"}
                         </p>
                         {isUploading && (
                           <span
                             className={clsx(
-                              "ui-text-xs ui-font-medium",
-                              isComplete
-                                ? "ui-text-green-500"
-                                : "ui-text-blue-500"
+                              "text-xs font-medium",
+                              isComplete ? "text-green-500" : "text-blue-500"
                             )}
                           >
                             {isComplete ? "Complete" : `${fileProgress}%`}
@@ -317,10 +312,10 @@ export function FileUploadZone({
                       <button
                         type="button"
                         onClick={() => removeFile(index)}
-                        className="ui-ml-4 ui-p-1 ui-rounded-full ui-text-gray-400 ui-hover:text-red-500 ui-transition-colors"
+                        className="ml-4 p-1 rounded-full text-gray-400 hover:text-red-500 transition-colors"
                       >
                         <svg
-                          className="ui-w-5 ui-h-5"
+                          className="w-5 h-5"
                           fill="currentColor"
                           viewBox="0 0 20 20"
                           xmlns="http://www.w3.org/2000/svg"
@@ -334,15 +329,15 @@ export function FileUploadZone({
                       </button>
                     )}
                     {isUploading && !isComplete && (
-                      <div className="ui-ml-4 ui-w-5 ui-h-5">
+                      <div className="ml-4 w-5 h-5">
                         <svg
-                          className="ui-w-5 ui-h-5 ui-animate-spin ui-text-blue-500"
+                          className="w-5 h-5 animate-spin text-blue-500"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
                         >
                           <circle
-                            className="ui-opacity-25"
+                            className="opacity-25"
                             cx="12"
                             cy="12"
                             r="10"
@@ -350,7 +345,7 @@ export function FileUploadZone({
                             strokeWidth="4"
                           ></circle>
                           <path
-                            className="ui-opacity-75"
+                            className="opacity-75"
                             fill="currentColor"
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                           ></path>
@@ -363,14 +358,14 @@ export function FileUploadZone({
             })}
           </ul>
           {!isUploading && selectedFiles.length > 1 && (
-            <div className="ui-px-4 ui-py-3 ui-bg-gray-50 ui-border-t ui-border-gray-200 ui-text-right">
+            <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 text-right">
               <button
                 type="button"
                 onClick={() => {
                   setSelectedFiles([]);
                   onFilesSelected([]);
                 }}
-                className="ui-text-xs ui-font-medium ui-text-red-600 ui-hover:text-red-800"
+                className="text-xs font-medium text-red-600 hover:text-red-800"
               >
                 Clear all files
               </button>

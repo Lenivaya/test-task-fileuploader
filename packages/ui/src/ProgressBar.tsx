@@ -1,91 +1,98 @@
-import { HTMLAttributes } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 
-export type ProgressBarVariant = "default" | "success" | "warning" | "danger";
-export type ProgressBarSize = "xs" | "sm" | "md" | "lg";
+export type ProgressVariant = "primary" | "success" | "warning" | "danger";
+export type ProgressSize = "xs" | "sm" | "md" | "lg";
 
 export interface ProgressBarProps extends HTMLAttributes<HTMLDivElement> {
-  progress: number;
-  variant?: ProgressBarVariant;
-  size?: ProgressBarSize;
-  showPercentage?: boolean;
+  value: number;
+  max?: number;
+  variant?: ProgressVariant;
+  size?: ProgressSize;
+  showLabel?: boolean;
+  labelFormat?: (value: number, max: number) => ReactNode;
   animate?: boolean;
   className?: string;
 }
 
 export function ProgressBar({
-  progress,
-  variant = "default",
+  value,
+  max = 100,
+  variant = "primary",
   size = "md",
-  showPercentage = false,
-  animate = true,
+  showLabel = true,
+  labelFormat,
+  animate = false,
   className = "",
   ...props
 }: ProgressBarProps) {
-  // Ensure progress is between 0 and 100
-  const normalizedProgress = Math.max(0, Math.min(100, progress));
+  // Ensure value is between 0 and max
+  const clampedValue = Math.max(0, Math.min(value, max));
+  const percentage = (clampedValue / max) * 100;
 
-  // Format percentage for display
-  const formattedProgress = `${Math.round(normalizedProgress)}%`;
-
+  // Define styles for different variants
   const variantStyles = {
-    default: {
-      bar: "ui-bg-blue-500",
-      track: "ui-bg-blue-100",
-      text: "ui-text-blue-800",
+    primary: {
+      bar: "bg-blue-500",
+      track: "bg-blue-100",
+      text: "text-blue-800",
     },
     success: {
-      bar: "ui-bg-green-500",
-      track: "ui-bg-green-100",
-      text: "ui-text-green-800",
+      bar: "bg-green-500",
+      track: "bg-green-100",
+      text: "text-green-800",
     },
     warning: {
-      bar: "ui-bg-amber-500",
-      track: "ui-bg-amber-100",
-      text: "ui-text-amber-800",
+      bar: "bg-amber-500",
+      track: "bg-amber-100",
+      text: "text-amber-800",
     },
     danger: {
-      bar: "ui-bg-red-500",
-      track: "ui-bg-red-100",
-      text: "ui-text-red-800",
+      bar: "bg-red-500",
+      track: "bg-red-100",
+      text: "text-red-800",
     },
   };
 
+  // Define size styles
   const sizeStyles = {
-    xs: "ui-h-1",
-    sm: "ui-h-1.5",
-    md: "ui-h-2.5",
-    lg: "ui-h-4",
+    xs: "h-1",
+    sm: "h-1.5",
+    md: "h-2.5",
+    lg: "h-4",
   };
 
+  // Define text size styles based on progress bar size
   const textSizeStyles = {
-    xs: "ui-text-xs",
-    sm: "ui-text-xs",
-    md: "ui-text-sm",
-    lg: "ui-text-sm",
+    xs: "text-xs",
+    sm: "text-xs",
+    md: "text-sm",
+    lg: "text-sm",
   };
 
   return (
-    <div className={`ui-w-full ${className}`} {...props}>
-      <div className="ui-flex ui-items-center ui-gap-3">
+    <div className={`w-full ${className}`} {...props}>
+      <div className="flex items-center gap-3">
         <div
-          className={`ui-flex-1 ui-overflow-hidden ui-rounded-full ${variantStyles[variant].track}`}
+          className={`flex-1 overflow-hidden rounded-full ${variantStyles[variant].track}`}
           role="progressbar"
-          aria-valuenow={normalizedProgress}
+          aria-valuenow={clampedValue}
           aria-valuemin={0}
-          aria-valuemax={100}
+          aria-valuemax={max}
         >
           <div
-            className={`${sizeStyles[size]} ${variantStyles[variant].bar} ui-rounded-full ui-transition-all ui-duration-300 ui-ease-out ${animate ? "ui-animate-pulse" : ""}`}
-            style={{ width: `${normalizedProgress}%` }}
-          />
+            className={`${sizeStyles[size]} ${variantStyles[variant].bar} rounded-full transition-all duration-300 ease-out ${animate ? "animate-pulse" : ""}`}
+            style={{ width: `${percentage}%` }}
+          ></div>
         </div>
 
-        {showPercentage && (
-          <div
-            className={`ui-flex-shrink-0 ${textSizeStyles[size]} ui-font-medium ${variantStyles[variant].text}`}
+        {showLabel && (
+          <span
+            className={`flex-shrink-0 ${textSizeStyles[size]} font-medium ${variantStyles[variant].text}`}
           >
-            {formattedProgress}
-          </div>
+            {labelFormat
+              ? labelFormat(clampedValue, max)
+              : `${Math.round(percentage)}%`}
+          </span>
         )}
       </div>
     </div>

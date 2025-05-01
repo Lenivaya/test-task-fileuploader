@@ -1,9 +1,8 @@
 'use client'
 
 import { trpc } from '@file-uploader/trpc/client'
+import { Button, Card, CardContent, CardHeader, FileUploadZone } from '@repo/ui'
 import { useState } from 'react'
-import clsx from 'clsx'
-import { Button, Card, CardHeader, CardContent, FileUploadZone } from '@repo/ui'
 
 export function FileUploader() {
   const [files, setFiles] = useState<File[]>([])
@@ -11,7 +10,7 @@ export function FileUploader() {
   const [uploadProgress, setUploadProgress] = useState<{
     [key: string]: number
   }>({})
-  const utils = trpc.useContext()
+  const utils = trpc.useUtils()
 
   const uploadMutation = trpc.file.uploadFile.useMutation({
     onSuccess: () => {
@@ -103,13 +102,13 @@ export function FileUploader() {
   }
 
   return (
-    <Card className='ui-mb-6 ui-transform ui-transition-all ui-duration-300 hover:ui-shadow-lg'>
+    <Card className='mb-6 transform transition-all duration-300 hover:shadow-lg'>
       <CardHeader
         title='Upload Files'
         subtitle='Select files to upload to the server'
         action={
           uploading && (
-            <div className='ui-animate-pulse ui-bg-blue-100 ui-text-blue-700 ui-px-3 ui-py-1 ui-rounded-full ui-text-xs ui-font-medium'>
+            <div className='animate-pulse bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium'>
               Uploading...
             </div>
           )
@@ -128,11 +127,11 @@ export function FileUploader() {
           <Button
             onClick={handleUpload}
             disabled={files.length === 0}
-            className='ui-mt-6 ui-w-full ui-transition-transform ui-duration-200 ui-transform hover:ui-scale-105'
+            className='mt-6 w-full transition-transform duration-200 transform hover:scale-105'
           >
-            <span className='ui-flex ui-items-center ui-justify-center'>
+            <span className='flex items-center justify-center'>
               <svg
-                className='ui-w-5 ui-h-5 ui-mr-2'
+                className='w-5 h-5 mr-2'
                 fill='none'
                 stroke='currentColor'
                 viewBox='0 0 24 24'
@@ -151,10 +150,10 @@ export function FileUploader() {
         )}
 
         {uploadMutation.isError && (
-          <div className='ui-mt-4 ui-p-3 ui-bg-red-50 ui-border ui-border-red-100 ui-rounded-lg ui-text-sm ui-text-red-500'>
-            <div className='ui-flex ui-items-center'>
+          <div className='mt-4 p-3 bg-red-50 border border-red-100 rounded-lg text-sm text-red-500'>
+            <div className='flex items-center'>
               <svg
-                className='ui-w-5 ui-h-5 ui-mr-2'
+                className='w-5 h-5 mr-2'
                 xmlns='http://www.w3.org/2000/svg'
                 viewBox='0 0 24 24'
                 fill='none'

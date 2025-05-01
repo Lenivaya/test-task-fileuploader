@@ -35,11 +35,11 @@ export function FileList() {
       return (
         <div
           className={clsx(
-            'ui-py-8 ui-text-center ui-text-gray-500 ui-animate-pulse ui-flex ui-flex-col ui-items-center'
+            'py-8 text-center text-gray-500 animate-pulse flex flex-col items-center'
           )}
         >
           <svg
-            className={clsx('ui-w-10 ui-h-10 ui-mb-4 ui-text-blue-300')}
+            className={clsx('w-10 h-10 mb-4 text-blue-300')}
             xmlns='http://www.w3.org/2000/svg'
             viewBox='0 0 24 24'
             fill='none'
@@ -61,11 +61,11 @@ export function FileList() {
       return (
         <div
           className={clsx(
-            'ui-py-6 ui-text-center ui-text-red-500 ui-bg-red-50 ui-rounded-lg ui-border ui-border-red-100'
+            'py-6 text-center text-red-500 bg-red-50 rounded-lg border border-red-100'
           )}
         >
           <svg
-            className={clsx('ui-w-8 ui-h-8 ui-mx-auto ui-mb-3 ui-text-red-400')}
+            className={clsx('w-8 h-8 mx-auto mb-3 text-red-400')}
             xmlns='http://www.w3.org/2000/svg'
             viewBox='0 0 24 24'
             fill='none'
@@ -78,10 +78,8 @@ export function FileList() {
             <line x1='12' y1='8' x2='12' y2='12'></line>
             <line x1='12' y1='16' x2='12.01' y2='16'></line>
           </svg>
-          <p className={clsx('ui-font-medium')}>Error loading files</p>
-          <p className={clsx('ui-text-sm ui-mt-1')}>
-            {filesQuery.error.message}
-          </p>
+          <p className={clsx('font-medium')}>Error loading files</p>
+          <p className={clsx('text-sm mt-1')}>{filesQuery.error.message}</p>
         </div>
       )
     }
@@ -96,11 +94,11 @@ export function FileList() {
           action={
             <div
               className={clsx(
-                'ui-flex ui-items-center ui-justify-center ui-text-sm ui-text-gray-500 ui-mt-2'
+                'flex items-center justify-center text-sm text-gray-500 mt-2'
               )}
             >
               <svg
-                className={clsx('ui-w-5 ui-h-5 ui-mr-2 ui-text-gray-400')}
+                className={clsx('w-5 h-5 mr-2 text-gray-400')}
                 xmlns='http://www.w3.org/2000/svg'
                 viewBox='0 0 24 24'
                 fill='none'
@@ -121,7 +119,7 @@ export function FileList() {
     }
 
     return (
-      <div className={clsx('ui-space-y-3')}>
+      <div className={clsx('space-y-3')}>
         {files.map((file) => (
           <FileCard
             key={file.id}
@@ -130,7 +128,7 @@ export function FileList() {
             fileType={file.mimeType}
             uploadDate={file.createdAt}
             actions={
-              <div className={clsx('ui-flex ui-gap-6')}>
+              <div className={clsx('flex gap-2')}>
                 <Button
                   variant='outline'
                   size='sm'
@@ -156,9 +154,7 @@ export function FileList() {
 
   return (
     <Card
-      className={clsx(
-        'ui-transform ui-transition-all ui-duration-300 hover:ui-shadow-lg'
-      )}
+      className={clsx('transform transition-all duration-300 hover:shadow-lg')}
     >
       <CardHeader
         title='Your Files'
@@ -166,9 +162,9 @@ export function FileList() {
         action={
           filesQuery.data &&
           filesQuery.data.length > 0 && (
-            <div className={clsx('ui-flex ui-items-center')}>
+            <div className={clsx('flex items-center')}>
               <svg
-                className={clsx('ui-w-4 ui-h-4 ui-mr-1 ui-text-blue-500')}
+                className={clsx('w-4 h-4 mr-1 text-blue-500')}
                 xmlns='http://www.w3.org/2000/svg'
                 viewBox='0 0 24 24'
                 fill='none'
@@ -191,7 +187,7 @@ export function FileList() {
           )
         }
       />
-      <CardContent className={clsx('ui-p-5')}>{renderContent()}</CardContent>
+      <CardContent className={clsx('p-5')}>{renderContent()}</CardContent>
     </Card>
   )
 }

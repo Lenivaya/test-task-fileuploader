@@ -2,29 +2,36 @@ import { ReactNode } from "react";
 import clsx from "clsx";
 
 export interface CardProps {
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
-  hover?: boolean;
+  hoverable?: boolean;
+  onClick?: () => void;
 }
 
-export function Card({ children, className = "", hover = false }: CardProps) {
+export function Card({
+  children,
+  className = "",
+  hoverable = false,
+  onClick,
+}: CardProps) {
+  const cardClasses = clsx(
+    "bg-white shadow-sm rounded-lg overflow-hidden border border-gray-100",
+    hoverable && "cursor-pointer",
+    hoverable &&
+      "transition-all duration-200 hover:shadow-md hover:border-gray-200",
+    className
+  );
+
   return (
-    <div
-      className={clsx(
-        "ui-bg-white ui-shadow-sm ui-rounded-lg ui-overflow-hidden ui-border ui-border-gray-100",
-        hover &&
-          "ui-transition-all ui-duration-200 hover:ui-shadow-md hover:ui-border-gray-200",
-        className
-      )}
-    >
+    <div className={cardClasses} onClick={onClick}>
       {children}
     </div>
   );
 }
 
 export interface CardHeaderProps {
-  title?: ReactNode;
-  subtitle?: ReactNode;
+  title?: string;
+  subtitle?: string;
   action?: ReactNode;
   className?: string;
 }
@@ -35,39 +42,37 @@ export function CardHeader({
   action,
   className = "",
 }: CardHeaderProps) {
+  if (!title && !subtitle && !action) return null;
+
   return (
     <div
       className={clsx(
-        "ui-px-6 ui-py-5 ui-flex ui-justify-between ui-items-center ui-border-b ui-border-gray-100",
+        "px-6 py-5 flex justify-between items-center border-b border-gray-100",
         className
       )}
     >
       <div>
         {title && (
-          <h3 className="ui-text-xl ui-font-semibold ui-text-gray-800">
-            {title}
-          </h3>
+          <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
         )}
-        {subtitle && (
-          <p className="ui-text-sm ui-text-gray-500 ui-mt-1.5">{subtitle}</p>
-        )}
+        {subtitle && <p className="text-sm text-gray-500 mt-1.5">{subtitle}</p>}
       </div>
-      {action && <div className="ui-ml-4 ui-flex-shrink-0">{action}</div>}
+      {action && <div className="ml-4 flex-shrink-0">{action}</div>}
     </div>
   );
 }
 
 export interface CardContentProps {
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
 }
 
 export function CardContent({ children, className = "" }: CardContentProps) {
-  return <div className={clsx("ui-p-6", className)}>{children}</div>;
+  return <div className={clsx("p-6", className)}>{children}</div>;
 }
 
 export interface CardFooterProps {
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
 }
 
@@ -75,7 +80,7 @@ export function CardFooter({ children, className = "" }: CardFooterProps) {
   return (
     <div
       className={clsx(
-        "ui-px-6 ui-py-4 ui-bg-gray-50 ui-border-t ui-border-gray-100",
+        "px-6 py-4 bg-gray-50 border-t border-gray-100",
         className
       )}
     >

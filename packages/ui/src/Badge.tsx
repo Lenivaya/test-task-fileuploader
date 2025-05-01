@@ -25,25 +25,25 @@ export function Badge({
   className = "",
 }: BadgeProps) {
   const variantStyles = {
-    default: "ui-bg-gray-100 ui-text-gray-800",
-    primary: "ui-bg-blue-100 ui-text-blue-800",
-    success: "ui-bg-green-100 ui-text-green-800",
-    warning: "ui-bg-yellow-100 ui-text-yellow-800",
-    danger: "ui-bg-red-100 ui-text-red-800",
-    info: "ui-bg-indigo-100 ui-text-indigo-800",
+    default: "bg-gray-100 text-gray-800",
+    primary: "bg-blue-100 text-blue-800",
+    success: "bg-green-100 text-green-800",
+    warning: "bg-yellow-100 text-yellow-800",
+    danger: "bg-red-100 text-red-800",
+    info: "bg-indigo-100 text-indigo-800",
   };
 
   const sizeStyles = {
-    sm: "ui-text-xs ui-px-1.5 ui-py-0.5",
-    md: "ui-text-xs ui-px-2 ui-py-1",
-    lg: "ui-text-sm ui-px-2.5 ui-py-1.5",
+    sm: "text-xs px-1.5 py-0.5",
+    md: "text-xs px-2 py-1",
+    lg: "text-sm px-2.5 py-1.5",
   };
 
-  const roundedStyles = rounded ? "ui-rounded-full" : "ui-rounded";
+  const roundedStyles = rounded ? "rounded-full" : "rounded";
 
   return (
     <span
-      className={`ui-inline-flex ui-items-center ui-font-medium ${variantStyles[variant]} ${sizeStyles[size]} ${roundedStyles} ${className}`}
+      className={`inline-flex items-center font-medium ${variantStyles[variant]} ${sizeStyles[size]} ${roundedStyles} ${className}`}
     >
       {children}
     </span>

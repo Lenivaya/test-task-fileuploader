@@ -40,15 +40,15 @@ export function FileCard({
   return (
     <div
       className={clsx(
-        "ui-bg-white ui-rounded-lg ui-shadow-sm ui-overflow-hidden ui-border ui-border-gray-200",
-        "ui-flex ui-items-center ui-p-4 ui-gap-4 ui-transition-all ui-duration-200",
+        "bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200",
+        "flex items-center p-4 gap-4 transition-all duration-200",
         onClick &&
-          "ui-cursor-pointer hover:ui-bg-gray-50 hover:ui-shadow-md hover:ui-border-gray-300 active:ui-transform active:ui-scale-[0.99]",
+          "cursor-pointer hover:bg-gray-50 hover:shadow-md hover:border-gray-300 active:transform active:scale-[0.99]",
         className
       )}
       onClick={onClick}
     >
-      <div className="ui-flex-shrink-0">
+      <div className="flex-shrink-0">
         <FileThumbnail
           fileName={fileName}
           fileType={fileType}
@@ -56,23 +56,23 @@ export function FileCard({
         />
       </div>
 
-      <div className="ui-flex-1 ui-min-w-0">
-        <h3 className="ui-text-sm ui-font-medium ui-text-gray-900 ui-truncate">
+      <div className="flex-1 min-w-0">
+        <h3 className="text-sm font-medium text-gray-900 truncate">
           {fileName}
         </h3>
-        <div className="ui-flex ui-flex-wrap ui-items-center ui-text-xs ui-text-gray-500 ui-mt-1.5 ui-gap-1.5">
+        <div className="flex flex-wrap items-center text-xs text-gray-500 mt-1.5 gap-1.5">
           {fileType && (
-            <span className="ui-truncate ui-bg-gray-100 ui-text-gray-700 ui-rounded-full ui-px-2 ui-py-0.5">
+            <span className="truncate bg-gray-100 text-gray-700 rounded-full px-2 py-0.5">
               {fileType}
             </span>
           )}
           {fileSize !== undefined && (
-            <span className="ui-whitespace-nowrap">
+            <span className="whitespace-nowrap">
               {formatFileSize(fileSize)}
             </span>
           )}
           {uploadDate && (
-            <span className="ui-whitespace-nowrap ui-text-gray-400">
+            <span className="whitespace-nowrap text-gray-400">
               {formatDate(uploadDate)}
             </span>
           )}
@@ -80,7 +80,7 @@ export function FileCard({
       </div>
 
       {actions && (
-        <div className="ui-flex-shrink-0 ui-ml-auto ui-flex ui-items-center ui-gap-2">
+        <div className="flex-shrink-0 ml-auto flex items-center gap-2">
           {actions}
         </div>
       )}

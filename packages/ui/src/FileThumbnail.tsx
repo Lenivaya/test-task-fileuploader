@@ -18,20 +18,20 @@ export function FileThumbnail({
   const fileExtension = fileName.split(".").pop()?.toLowerCase() || "";
 
   const sizeStyles = {
-    sm: "ui-w-8 ui-h-8",
-    md: "ui-w-12 ui-h-12",
-    lg: "ui-w-16 ui-h-16",
+    sm: "w-8 h-8",
+    md: "w-12 h-12",
+    lg: "w-16 h-16",
   };
 
   const iconSize = {
-    sm: "ui-w-5 ui-h-5",
-    md: "ui-w-8 ui-h-8",
-    lg: "ui-w-10 ui-h-10",
+    sm: "w-5 h-5",
+    md: "w-8 h-8",
+    lg: "w-10 h-10",
   };
 
   // File type icon mapping
   const getFileIcon = () => {
-    const iconClasses = `${iconSize[size]} ui-text-gray-500`;
+    const iconClasses = `${iconSize[size]} text-gray-500`;
 
     // Check if it's an image type from MIME type
     const isImage =
@@ -243,17 +243,17 @@ export function FileThumbnail({
 
   return thumbnailUrl ? (
     <div
-      className={`ui-flex-shrink-0 ${sizeStyles[size]} ui-rounded ui-overflow-hidden ${className}`}
+      className={`flex-shrink-0 ${sizeStyles[size]} rounded overflow-hidden ${className}`}
     >
       <img
         src={thumbnailUrl}
         alt={fileName}
-        className="ui-w-full ui-h-full ui-object-cover"
+        className="w-full h-full object-cover"
       />
     </div>
   ) : (
     <div
-      className={`ui-flex-shrink-0 ${sizeStyles[size]} ui-rounded ui-bg-gray-100 ui-flex ui-items-center ui-justify-center ${className}`}
+      className={`flex-shrink-0 ${sizeStyles[size]} rounded flex items-center justify-center bg-gray-100 ${className}`}
     >
       {getFileIcon()}
     </div>
