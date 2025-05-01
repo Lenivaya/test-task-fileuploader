@@ -7,7 +7,6 @@ import { kafkaService } from '../services/kafka'
 import { deleteFileFromS3, uploadFileToS3 } from '../services/s3'
 
 export const fileRouter = router({
-  // Get all files
   getFiles: publicProcedure.query(async () => {
     const files = await prisma.file.findMany({
       orderBy: {
@@ -18,7 +17,6 @@ export const fileRouter = router({
     return files
   }),
 
-  // Upload a file
   uploadFile: publicProcedure
     .input(createFileSchema)
     .mutation(async ({ input }) => {
@@ -28,7 +26,6 @@ export const fileRouter = router({
       const s3Key = `${timestamp}-${originalname.replace(/\s+/g, '-')}`
 
       try {
-        // Convert base64 to buffer
         const buffer = Buffer.from(content, 'base64')
 
         if (!buffer.length) {
@@ -45,7 +42,6 @@ export const fileRouter = router({
         )
         const url = await uploadFileToS3(s3Key, buffer, type)
 
-        // Save to database
         const newFile = await prisma.file.create({
           data: {
             name,
@@ -63,7 +59,6 @@ export const fileRouter = router({
           'File uploaded successfully'
         )
 
-        // Publish to Kafka
         await kafkaService.publishFileUploaded(newFile)
 
         return newFile
@@ -76,7 +71,6 @@ export const fileRouter = router({
       }
     }),
 
-  // Delete a file
   deleteFile: publicProcedure
     .input(deleteFileSchema)
     .mutation(async ({ input }) => {
@@ -95,11 +89,9 @@ export const fileRouter = router({
       }
 
       try {
-        // Delete from S3
         logger.debug({ fileId: id, s3Key: file.s3Key }, 'Deleting file from S3')
         await deleteFileFromS3(file.s3Key)
 
-        // Delete from database
         await prisma.file.delete({
           where: { id }
         })
