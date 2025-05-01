@@ -3,7 +3,7 @@
 import { trpc } from '@file-uploader/trpc/client'
 import { Button, Card, CardContent, CardHeader } from '@file-uploader/ui'
 import { FileUploadZone } from '@file-uploader/ui/client'
-import { useCallback, useRef, useState } from 'react'
+import { useState, useCallback, useRef } from 'react'
 
 export function FileUploader() {
   const [files, setFiles] = useState<File[]>([])

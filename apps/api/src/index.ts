@@ -10,19 +10,16 @@ import { startS3SyncJob } from '@file-uploader/trpc'
 import { logger } from '@file-uploader/trpc'
 
 async function main() {
-  // Create Fastify server
   const server = fastify({
     maxParamLength: 5000,
-    bodyLimit: 10 * 1024 * 1024 // 10MB body limit
+    bodyLimit: 10 * 1024 * 1024
   })
 
-  // Register CORS
   await server.register(cors, {
-    origin: true, // Allow all origins in development
-    credentials: true // Allow credentials
+    origin: true,
+    credentials: true
   })
 
-  // Register tRPC
   await server.register(fastifyTRPCPlugin, {
     prefix: '/trpc',
     trpcOptions: {
@@ -31,20 +28,16 @@ async function main() {
     }
   })
 
-  // Initialize Kafka
   await kafkaService.initialize()
   logger.info('Kafka service initialized successfully')
 
-  // Start S3 sync job (runs every 30 minutes)
   startS3SyncJob(30)
   logger.info({ intervalMinutes: 30 }, 'S3 sync job scheduled')
 
-  // Health check endpoint
   server.get('/health', async () => {
     return { status: 'ok' }
   })
 
-  // Handle shutdown
   const shutdown = async () => {
     try {
       logger.info('Server shutdown initiated')
@@ -61,7 +54,6 @@ async function main() {
   process.on('SIGINT', shutdown)
   process.on('SIGTERM', shutdown)
 
-  // Start server
   await server.listen({ port: env.PORT, host: env.HOST })
   logger.info({ address: `${env.HOST}:${env.PORT}` }, 'Server listening')
 }
