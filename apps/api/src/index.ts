@@ -17,7 +17,8 @@ async function main() {
 
   // Register CORS
   await server.register(cors, {
-    origin: true // Allow all origins in development
+    origin: true, // Allow all origins in development
+    credentials: true // Allow credentials
   })
 
   // Register tRPC
