@@ -9,7 +9,7 @@ A mini-platform for managing files, built with a modern stack:
 
 ## Video example
 
-![Video example](https://github.com/user-attachments/assets/7f896a4f-7f34-4291-b2b2-f59c83fac601)
+https://github.com/user-attachments/assets/7f896a4f-7f34-4291-b2b2-f59c83fac601
 
 ## Features
 
