@@ -1,3 +1,5 @@
+'use client'
+
 import React, { ChangeEvent, ReactNode, useCallback, useState } from 'react'
 import clsx from 'clsx'
 import humanFormat from 'human-format'

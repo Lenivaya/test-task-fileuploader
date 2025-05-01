@@ -1,6 +1,8 @@
 {
   "extends": "@file-uploader/typescript-config/nextjs.json",
-  "compilerOptions": {},
+  "compilerOptions": {
+    "outDir": "dist"
+  },
   "include": ["**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }

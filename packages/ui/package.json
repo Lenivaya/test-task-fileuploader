@@ -13,13 +13,18 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.mjs",
+      "require": "./dist/client.js"
     }
   },
   "license": "MIT",
   "scripts": {
-    "build": "tsup src/index.tsx --format esm,cjs --dts --external react && tailwindcss -i ./src/styles.css -o ./dist/index.css",
+    "build": "tsup src/index.tsx src/client.tsx --format esm,cjs --dts --external react && tailwindcss -i ./src/styles.css -o ./dist/index.css",
     "check-types": "tsc --noEmit",
-    "dev": "concurrently \"tsup src/index.tsx --format esm,cjs --dts --external react --watch\" \"tailwindcss -i ./src/styles.css -o ./dist/index.css --watch\"",
+    "dev": "concurrently \"tsup src/index.tsx src/client.tsx --format esm,cjs --dts --external react --watch\" \"tailwindcss -i ./src/styles.css -o ./dist/index.css --watch\"",
     "lint": "eslint src --max-warnings 0",
     "format": "prettier --write src"
   },

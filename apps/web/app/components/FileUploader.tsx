@@ -1,109 +1,108 @@
 'use client'
 
 import { trpc } from '@file-uploader/trpc/client'
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  FileUploadZone
-} from '@file-uploader/ui'
-import { useState } from 'react'
+import { Button, Card, CardContent, CardHeader } from '@file-uploader/ui'
+import { FileUploadZone } from '@file-uploader/ui/client'
+import { useCallback, useRef, useState } from 'react'
 
 export function FileUploader() {
   const [files, setFiles] = useState<File[]>([])
   const [uploading, setUploading] = useState(false)
-  const [uploadProgress, setUploadProgress] = useState<{
-    [key: string]: number
-  }>({})
+  const [uploadProgress, setUploadProgress] = useState<Record<string, number>>(
+    {}
+  )
+  const abortControllerRef = useRef<AbortController | null>(null)
   const utils = trpc.useUtils()
 
   const uploadMutation = trpc.file.uploadFile.useMutation({
     onSuccess: () => {
-      // Reset form and refresh file list after successful upload
       utils.file.getFiles.invalidate()
     }
   })
 
-  const handleFilesSelected = (selectedFiles: File[]) => {
-    // Append new files to existing ones instead of replacing
+  const handleFilesSelected = useCallback((selectedFiles: File[]) => {
     setFiles((prevFiles) => {
-      // Check for duplicate files (by name for simplicity)
       const newFiles = selectedFiles.filter(
         (newFile) =>
           !prevFiles.some((existingFile) => existingFile.name === newFile.name)
       )
 
-      const combinedFiles = [...prevFiles, ...newFiles]
+      setUploadProgress((prev) => ({
+        ...prev,
+        ...Object.fromEntries(newFiles.map((file) => [file.name, 0]))
+      }))
 
-      // Initialize progress for each new file
-      const newProgressEntries = newFiles.reduce(
-        (acc, file) => {
-          acc[file.name] = 0
-          return acc
-        },
-        {} as { [key: string]: number }
-      )
-
-      // Merge with existing progress entries
-      setUploadProgress((prev) => ({ ...prev, ...newProgressEntries }))
-
-      return combinedFiles
+      return [...prevFiles, ...newFiles]
     })
-  }
+  }, [])
 
   const handleUpload = async () => {
     if (files.length === 0) return
 
     setUploading(true)
+    abortControllerRef.current = new AbortController()
 
     try {
-      // Create an array of promises for each file upload
-      const uploadPromises = files.map(async (file) => {
-        // Convert file to base64 for transfer
-        const reader = new FileReader()
+      await Promise.all(
+        files.map(async (file) => {
+          const reader = new FileReader()
 
-        const fileData = await new Promise<string>((resolve) => {
-          reader.onload = (e) => {
-            const result = e.target?.result as string
-            // Remove data URL prefix if present
-            const base64 = result.split(',')[1] || result
-            resolve(base64)
-          }
-
-          // Add progress event to track reading progress
-          reader.onprogress = (event) => {
-            if (event.lengthComputable) {
-              const progress = Math.round((event.loaded / event.total) * 50) // First 50% is reading
-              setUploadProgress((prev) => ({ ...prev, [file.name]: progress }))
+          const fileData = await new Promise<string>((resolve, reject) => {
+            reader.onload = (e) => {
+              const result = e.target?.result as string
+              const base64 = result.split(',')[1] || result
+              resolve(base64)
             }
+
+            reader.onerror = () =>
+              reject(new Error(`Failed to read file: ${file.name}`))
+
+            reader.onprogress = (event) => {
+              if (event.lengthComputable) {
+                const progress = Math.round((event.loaded / event.total) * 50)
+                setUploadProgress((prev) => ({
+                  ...prev,
+                  [file.name]: progress
+                }))
+              }
+            }
+
+            reader.readAsDataURL(file)
+          })
+
+          // Check if upload was cancelled
+          if (abortControllerRef.current?.signal.aborted) {
+            throw new Error('Upload cancelled')
           }
 
-          reader.readAsDataURL(file)
+          await uploadMutation.mutateAsync({
+            name: file.name,
+            content: fileData,
+            size: file.size,
+            type: file.type
+          })
+
+          setUploadProgress((prev) => ({ ...prev, [file.name]: 100 }))
         })
+      )
 
-        // The next 50% is uploading
-        await uploadMutation.mutateAsync({
-          name: file.name,
-          content: fileData,
-          size: file.size,
-          type: file.type
-        })
-
-        // Set to 100% when upload is complete
-        setUploadProgress((prev) => ({ ...prev, [file.name]: 100 }))
-      })
-
-      // Wait for all uploads to complete
-      await Promise.all(uploadPromises)
-
-      // Clear only the files that were uploaded
       setFiles([])
       setUploadProgress({})
     } catch (error) {
-      console.error('Upload failed:', error)
+      if (error instanceof Error && error.message === 'Upload cancelled') {
+        console.log('Upload was cancelled')
+      } else {
+        console.error('Upload failed:', error)
+      }
     } finally {
       setUploading(false)
+      abortControllerRef.current = null
+    }
+  }
+
+  const cancelUpload = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
     }
   }
 
@@ -129,30 +128,41 @@ export function FileUploader() {
           progress={uploadProgress}
         />
 
-        {files.length > 0 && !uploading && (
-          <Button
-            onClick={handleUpload}
-            disabled={files.length === 0}
-            className='mt-6 w-full transition-transform duration-200 transform hover:scale-105'
-          >
-            <span className='flex items-center justify-center'>
-              <svg
-                className='w-5 h-5 mr-2'
-                fill='none'
-                stroke='currentColor'
-                viewBox='0 0 24 24'
-                xmlns='http://www.w3.org/2000/svg'
+        {files.length > 0 && (
+          <div className='mt-6 flex gap-2'>
+            {!uploading ? (
+              <Button
+                onClick={handleUpload}
+                className='flex-1 transition-transform duration-200 transform hover:scale-105'
               >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth={2}
-                  d='M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12'
-                />
-              </svg>
-              Upload {files.length} {files.length === 1 ? 'File' : 'Files'}
-            </span>
-          </Button>
+                <span className='flex items-center justify-center'>
+                  <svg
+                    className='w-5 h-5 mr-2'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={2}
+                      d='M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12'
+                    />
+                  </svg>
+                  Upload {files.length} {files.length === 1 ? 'File' : 'Files'}
+                </span>
+              </Button>
+            ) : (
+              <Button
+                variant='outline'
+                onClick={cancelUpload}
+                className='flex-1'
+              >
+                Cancel Upload
+              </Button>
+            )}
+          </div>
         )}
 
         {uploadMutation.isError && (
