@@ -37,16 +37,17 @@ export function FileUploadZone({
   const validateAndProcessFiles = useCallback(
     (fileList: FileList) => {
       setError(null);
-      const filesToUpload = Array.from(fileList);
+      const newFilesToUpload = Array.from(fileList);
+      const combinedFiles = [...selectedFiles, ...newFilesToUpload];
 
-      // Validate number of files
-      if (maxFiles > 0 && filesToUpload.length > maxFiles) {
+      // Validate total number of files after addition
+      if (maxFiles > 0 && combinedFiles.length > maxFiles) {
         setError(`Maximum ${maxFiles} files allowed`);
         return;
       }
 
       // Validate file size
-      const oversizedFiles = filesToUpload.filter(
+      const oversizedFiles = newFilesToUpload.filter(
         (file) => file.size > maxSizeInBytes
       );
       if (oversizedFiles.length > 0) {
@@ -54,10 +55,14 @@ export function FileUploadZone({
         return;
       }
 
-      setSelectedFiles(filesToUpload);
-      onFilesSelected(filesToUpload);
+      // Append new files to existing ones
+      setSelectedFiles(combinedFiles);
+      // Call parent callback outside the render cycle
+      setTimeout(() => {
+        onFilesSelected(newFilesToUpload);
+      }, 0);
     },
-    [maxFiles, maxSizeInBytes, formattedMaxSize, onFilesSelected]
+    [maxFiles, maxSizeInBytes, formattedMaxSize, onFilesSelected, selectedFiles]
   );
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -99,7 +104,10 @@ export function FileUploadZone({
       setSelectedFiles((prev) => {
         const updated = [...prev];
         updated.splice(index, 1);
-        onFilesSelected(updated);
+        // Call parent callback outside the render cycle
+        setTimeout(() => {
+          onFilesSelected(updated);
+        }, 0);
         return updated;
       });
     },

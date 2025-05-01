@@ -15,24 +15,36 @@ export function FileUploader() {
 
   const uploadMutation = trpc.file.uploadFile.useMutation({
     onSuccess: () => {
-      // Reset form and refresh file list
-      setFiles([])
-      setUploadProgress({})
+      // Reset form and refresh file list after successful upload
       utils.file.getFiles.invalidate()
     }
   })
 
   const handleFilesSelected = (selectedFiles: File[]) => {
-    setFiles(selectedFiles)
-    // Initialize progress for each file
-    const initial = selectedFiles.reduce(
-      (acc, file) => {
-        acc[file.name] = 0
-        return acc
-      },
-      {} as { [key: string]: number }
-    )
-    setUploadProgress(initial)
+    // Append new files to existing ones instead of replacing
+    setFiles((prevFiles) => {
+      // Check for duplicate files (by name for simplicity)
+      const newFiles = selectedFiles.filter(
+        (newFile) =>
+          !prevFiles.some((existingFile) => existingFile.name === newFile.name)
+      )
+
+      const combinedFiles = [...prevFiles, ...newFiles]
+
+      // Initialize progress for each new file
+      const newProgressEntries = newFiles.reduce(
+        (acc, file) => {
+          acc[file.name] = 0
+          return acc
+        },
+        {} as { [key: string]: number }
+      )
+
+      // Merge with existing progress entries
+      setUploadProgress((prev) => ({ ...prev, ...newProgressEntries }))
+
+      return combinedFiles
+    })
   }
 
   const handleUpload = async () => {
@@ -79,6 +91,10 @@ export function FileUploader() {
 
       // Wait for all uploads to complete
       await Promise.all(uploadPromises)
+
+      // Clear only the files that were uploaded
+      setFiles([])
+      setUploadProgress({})
     } catch (error) {
       console.error('Upload failed:', error)
     } finally {
