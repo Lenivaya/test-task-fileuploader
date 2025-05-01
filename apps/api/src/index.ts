@@ -12,7 +12,8 @@ import { logger } from '@file-uploader/trpc'
 async function main() {
   // Create Fastify server
   const server = fastify({
-    maxParamLength: 5000
+    maxParamLength: 5000,
+    bodyLimit: 10 * 1024 * 1024 // 10MB body limit
   })
 
   // Register CORS

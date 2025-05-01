@@ -34,7 +34,11 @@ export type FileInput = z.infer<typeof fileInputSchema>;
 export const createFileSchema = z.object({
   name: z.string().min(1),
   content: z.string(), // Base64 encoded file content
-  size: z.number().int().positive(),
+  size: z
+    .number()
+    .int()
+    .positive()
+    .max(10 * 1024 * 1024), // 10MB max size
   type: z.string(), // MIME type
 });
 
