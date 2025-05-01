@@ -1,83 +1,92 @@
-import { ReactNode } from "react";
+import { HTMLAttributes } from "react";
 
-export type ProgressBarSize = "sm" | "md" | "lg";
 export type ProgressBarVariant = "default" | "success" | "warning" | "danger";
+export type ProgressBarSize = "xs" | "sm" | "md" | "lg";
 
-export interface ProgressBarProps {
+export interface ProgressBarProps extends HTMLAttributes<HTMLDivElement> {
   progress: number;
-  max?: number;
-  size?: ProgressBarSize;
   variant?: ProgressBarVariant;
+  size?: ProgressBarSize;
   showPercentage?: boolean;
-  label?: ReactNode;
+  animate?: boolean;
   className?: string;
 }
 
 export function ProgressBar({
   progress,
-  max = 100,
-  size = "md",
   variant = "default",
+  size = "md",
   showPercentage = false,
-  label,
+  animate = true,
   className = "",
+  ...props
 }: ProgressBarProps) {
-  const percentage = Math.min(Math.max(0, (progress / max) * 100), 100);
+  // Ensure progress is between 0 and 100
+  const normalizedProgress = Math.max(0, Math.min(100, progress));
 
-  const sizeStyles = {
-    sm: "ui-h-1",
-    md: "ui-h-2",
-    lg: "ui-h-3",
-  };
+  // Format percentage for display
+  const formattedProgress = `${Math.round(normalizedProgress)}%`;
 
   const variantStyles = {
-    default: "ui-bg-blue-500",
-    success: "ui-bg-green-500",
-    warning: "ui-bg-yellow-500",
-    danger: "ui-bg-red-500",
+    default: {
+      bar: "ui-bg-blue-500",
+      track: "ui-bg-blue-100",
+      text: "ui-text-blue-800",
+    },
+    success: {
+      bar: "ui-bg-green-500",
+      track: "ui-bg-green-100",
+      text: "ui-text-green-800",
+    },
+    warning: {
+      bar: "ui-bg-amber-500",
+      track: "ui-bg-amber-100",
+      text: "ui-text-amber-800",
+    },
+    danger: {
+      bar: "ui-bg-red-500",
+      track: "ui-bg-red-100",
+      text: "ui-text-red-800",
+    },
   };
 
-  const getLabelColor = () => {
-    switch (variant) {
-      case "default":
-        return "ui-text-blue-700";
-      case "success":
-        return "ui-text-green-700";
-      case "warning":
-        return "ui-text-yellow-700";
-      case "danger":
-        return "ui-text-red-700";
-      default:
-        return "ui-text-gray-700";
-    }
+  const sizeStyles = {
+    xs: "ui-h-1",
+    sm: "ui-h-1.5",
+    md: "ui-h-2.5",
+    lg: "ui-h-4",
+  };
+
+  const textSizeStyles = {
+    xs: "ui-text-xs",
+    sm: "ui-text-xs",
+    md: "ui-text-sm",
+    lg: "ui-text-sm",
   };
 
   return (
-    <div className={`ui-w-full ${className}`}>
-      {(label || showPercentage) && (
-        <div className="ui-flex ui-justify-between ui-items-center ui-mb-1">
-          {label && (
-            <div className={`ui-text-sm ${getLabelColor()}`}>{label}</div>
-          )}
-          {showPercentage && (
-            <div className="ui-text-xs ui-font-medium ui-text-gray-500">
-              {percentage.toFixed(1)}%
-            </div>
-          )}
-        </div>
-      )}
-
-      <div
-        className={`ui-w-full ui-bg-gray-200 ui-rounded-full ${sizeStyles[size]}`}
-      >
+    <div className={`ui-w-full ${className}`} {...props}>
+      <div className="ui-flex ui-items-center ui-gap-3">
         <div
-          className={`${variantStyles[variant]} ui-rounded-full ${sizeStyles[size]} ui-transition-all ui-duration-300 ui-ease-in-out`}
-          style={{ width: `${percentage}%` }}
+          className={`ui-flex-1 ui-overflow-hidden ui-rounded-full ${variantStyles[variant].track}`}
           role="progressbar"
-          aria-valuenow={progress}
+          aria-valuenow={normalizedProgress}
           aria-valuemin={0}
-          aria-valuemax={max}
-        ></div>
+          aria-valuemax={100}
+        >
+          <div
+            className={`${sizeStyles[size]} ${variantStyles[variant].bar} ui-rounded-full ui-transition-all ui-duration-300 ui-ease-out ${animate ? "ui-animate-pulse" : ""}`}
+            style={{ width: `${normalizedProgress}%` }}
+          />
+        </div>
+
+        {showPercentage && (
+          <div
+            className={`ui-flex-shrink-0 ${textSizeStyles[size]} ui-font-medium ${variantStyles[variant].text}`}
+          >
+            {formattedProgress}
+          </div>
+        )}
       </div>
     </div>
   );

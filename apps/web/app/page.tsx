@@ -1,24 +1,12 @@
 import { FileUploader } from './components/FileUploader'
 import { FileList } from './components/FileList'
+import clsx from 'clsx'
 
 export default function Page() {
   return (
     <main className='min-h-screen bg-gradient-to-b from-blue-50 via-white to-gray-50 flex flex-col'>
       <div className='flex-1'>
-        <div className='max-w-6xl mx-auto px-4 py-12'>
-          <header className='mb-12 text-center'>
-            <div className='inline-block mb-4 px-3 py-1 bg-blue-100 rounded-full text-blue-800 text-sm font-medium'>
-              Secure File Management
-            </div>
-            <h1 className='text-4xl font-bold mb-3 text-gray-800 bg-gradient-to-r from-blue-600 to-indigo-600 inline-block text-transparent bg-clip-text'>
-              File Management Platform
-            </h1>
-            <p className='text-gray-600 max-w-2xl mx-auto'>
-              Upload, manage, and organize your files in one secure location.
-              Streamlined for efficiency and ease of use.
-            </p>
-          </header>
-
+        <div className='max-w-6xl mx-auto px-4 py-8'>
           <div className='grid gap-8 md:grid-cols-1 lg:grid-cols-1'>
             <FileUploader />
             <FileList />
@@ -35,14 +23,23 @@ export default function Page() {
                 rights reserved.
               </p>
             </div>
-            <div className='flex space-x-4'>
-              <a href='#' className='text-gray-500 hover:text-blue-600 text-sm'>
+            <div className='flex space-x-6'>
+              <a
+                href='#'
+                className='text-gray-500 hover:text-blue-600 text-sm font-medium'
+              >
                 Terms
               </a>
-              <a href='#' className='text-gray-500 hover:text-blue-600 text-sm'>
+              <a
+                href='#'
+                className='text-gray-500 hover:text-blue-600 text-sm font-medium'
+              >
                 Privacy
               </a>
-              <a href='#' className='text-gray-500 hover:text-blue-600 text-sm'>
+              <a
+                href='#'
+                className='text-gray-500 hover:text-blue-600 text-sm font-medium'
+              >
                 Contact
               </a>
             </div>

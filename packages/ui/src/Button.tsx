@@ -1,12 +1,19 @@
 import { ButtonHTMLAttributes, ReactNode } from "react";
+import clsx from "clsx";
 
-export type ButtonVariant = "primary" | "secondary" | "danger" | "outline";
-export type ButtonSize = "sm" | "md" | "lg";
+export type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "danger"
+  | "outline"
+  | "ghost";
+export type ButtonSize = "xs" | "sm" | "md" | "lg";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   isLoading?: boolean;
+  fullWidth?: boolean;
   children: ReactNode;
 }
 
@@ -14,36 +21,49 @@ export function Button({
   variant = "primary",
   size = "md",
   isLoading = false,
+  fullWidth = false,
   children,
   className = "",
   disabled,
   ...props
 }: ButtonProps) {
   const baseStyles =
-    "ui-font-medium ui-rounded ui-transition-colors ui-focus:outline-none ui-focus:ring-2 ui-focus:ring-offset-2 ui-inline-flex ui-items-center ui-justify-center";
+    "ui-font-medium ui-rounded-md ui-transition-all ui-duration-200 ui-inline-flex ui-items-center ui-justify-center ui-focus:outline-none ui-focus:ring-2 ui-focus:ring-offset-2 ui-min-w-[4.5rem]";
 
   const variantStyles = {
     primary:
-      "ui-bg-blue-600 ui-text-white ui-hover:bg-blue-700 ui-focus:ring-blue-500",
+      "ui-bg-blue-600 ui-text-white ui-shadow-sm hover:ui-bg-blue-700 ui-focus:ring-blue-500 active:ui-bg-blue-800 active:ui-transform active:ui-scale-[0.98]",
     secondary:
-      "ui-bg-gray-200 ui-text-gray-800 ui-hover:bg-gray-300 ui-focus:ring-gray-400",
+      "ui-bg-gray-100 ui-text-gray-800 ui-shadow-sm hover:ui-bg-gray-200 ui-focus:ring-gray-400 active:ui-bg-gray-300 active:ui-transform active:ui-scale-[0.98]",
     danger:
-      "ui-bg-red-600 ui-text-white ui-hover:bg-red-700 ui-focus:ring-red-500",
+      "ui-bg-red-600 ui-text-white ui-shadow-sm hover:ui-bg-red-700 ui-focus:ring-red-500 active:ui-bg-red-800 active:ui-transform active:ui-scale-[0.98]",
     outline:
-      "ui-border ui-border-gray-300 ui-bg-transparent ui-text-gray-700 ui-hover:bg-gray-50 ui-focus:ring-gray-400",
+      "ui-border ui-border-gray-300 ui-bg-white ui-text-gray-700 hover:ui-bg-gray-50 ui-focus:ring-gray-400 active:ui-bg-gray-100 active:ui-transform active:ui-scale-[0.98]",
+    ghost:
+      "ui-text-gray-700 ui-bg-transparent hover:ui-bg-gray-100 ui-focus:ring-gray-400 active:ui-bg-gray-200 active:ui-transform active:ui-scale-[0.98]",
   };
 
   const sizeStyles = {
-    sm: "ui-text-sm ui-px-3 ui-py-1",
-    md: "ui-text-base ui-px-4 ui-py-2",
-    lg: "ui-text-lg ui-px-5 ui-py-2.5",
+    xs: "ui-text-xs ui-px-2.5 ui-py-1 ui-gap-1",
+    sm: "ui-text-sm ui-px-3.5 ui-py-1.5 ui-gap-1.5",
+    md: "ui-text-sm ui-px-4 ui-py-2 ui-gap-2",
+    lg: "ui-text-base ui-px-5 ui-py-2.5 ui-gap-2",
   };
 
-  const disabledStyles = "ui-opacity-60 ui-cursor-not-allowed";
+  const disabledStyles =
+    "ui-opacity-60 ui-cursor-not-allowed ui-pointer-events-none ui-shadow-none";
+  const widthStyles = fullWidth ? "ui-w-full" : "";
 
   return (
     <button
-      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${disabled || isLoading ? disabledStyles : ""} ${className}`}
+      className={clsx(
+        baseStyles,
+        variantStyles[variant],
+        sizeStyles[size],
+        widthStyles,
+        (disabled || isLoading) && disabledStyles,
+        className
+      )}
       disabled={disabled || isLoading}
       {...props}
     >

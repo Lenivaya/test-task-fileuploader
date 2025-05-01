@@ -2,6 +2,7 @@
 
 import { trpc } from '@file-uploader/trpc/client'
 import { format } from 'date-fns'
+import clsx from 'clsx'
 import {
   Card,
   CardHeader,
@@ -130,7 +131,7 @@ export function FileList() {
             fileType={file.mimeType}
             uploadDate={file.createdAt}
             actions={
-              <div className='ui-flex ui-space-x-2'>
+              <div className='ui-flex ui-gap-6'>
                 <Button
                   variant='outline'
                   size='sm'

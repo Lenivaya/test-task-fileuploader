@@ -86,11 +86,11 @@ export function FileUploadZone({
   return (
     <div className={`ui-w-full ${className}`}>
       <div
-        className={`ui-border-2 ui-border-dashed ui-rounded-lg ui-p-6 ui-transition-colors ui-text-center ${
+        className={`ui-border-2 ui-border-dashed ui-rounded-lg ui-p-8 ui-transition-all ui-duration-200 ui-text-center ${
           isDragging
-            ? "ui-border-blue-500 ui-bg-blue-50"
-            : "ui-border-gray-300 ui-bg-gray-50"
-        } ${disabled ? "ui-opacity-60 ui-cursor-not-allowed" : "ui-cursor-pointer"}`}
+            ? "ui-border-blue-500 ui-bg-blue-50 ui-scale-[1.01] ui-shadow-sm"
+            : "ui-border-gray-300 ui-bg-gray-50 hover:ui-border-gray-400 hover:ui-bg-gray-100"
+        } ${disabled ? "ui-opacity-60 ui-cursor-not-allowed ui-pointer-events-none" : "ui-cursor-pointer"}`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -106,29 +106,31 @@ export function FileUploadZone({
         />
         <label
           htmlFor="fileInput"
-          className={`ui-flex ui-flex-col ui-items-center ui-justify-center ui-space-y-2 ${
+          className={`ui-flex ui-flex-col ui-items-center ui-justify-center ui-space-y-3 ${
             disabled ? "ui-cursor-not-allowed" : "ui-cursor-pointer"
           }`}
         >
           {children || (
             <>
-              <svg
-                className="ui-w-10 ui-h-10 ui-text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                />
-              </svg>
-              <p className="ui-text-sm ui-text-gray-600">
+              <div className="ui-w-14 ui-h-14 ui-flex ui-items-center ui-justify-center ui-bg-blue-50 ui-text-blue-600 ui-rounded-full ui-mb-2">
+                <svg
+                  className="ui-w-7 ui-h-7"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  />
+                </svg>
+              </div>
+              <p className="ui-text-sm ui-font-medium ui-text-gray-700">
                 Drag files here or{" "}
-                <span className="ui-text-blue-600 ui-font-medium">browse</span>
+                <span className="ui-text-blue-600 ui-underline">browse</span>
               </p>
               <p className="ui-text-xs ui-text-gray-500">
                 {maxFiles > 0 ? `Up to ${maxFiles} files` : "Multiple files"}{" "}
@@ -138,7 +140,23 @@ export function FileUploadZone({
           )}
         </label>
       </div>
-      {error && <p className="ui-text-sm ui-text-red-500 ui-mt-2">{error}</p>}
+      {error && (
+        <div className="ui-flex ui-items-center ui-mt-3 ui-text-sm ui-text-red-600">
+          <svg
+            className="ui-w-4 ui-h-4 ui-mr-1.5 ui-flex-shrink-0"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z"
+              clipRule="evenodd"
+            />
+          </svg>
+          {error}
+        </div>
+      )}
     </div>
   );
 }
