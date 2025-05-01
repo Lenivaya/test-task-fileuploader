@@ -8,6 +8,48 @@ export interface CardProps {
   onClick?: () => void;
 }
 
+export interface CardHeaderProps {
+  title?: string;
+  subtitle?: string;
+  action?: ReactNode;
+  className?: string;
+}
+
+export interface CardContentProps {
+  children?: ReactNode;
+  className?: string;
+}
+
+export interface CardFooterProps {
+  children?: ReactNode;
+  className?: string;
+}
+
+function CardHeaderAction({ action }: { action: ReactNode }) {
+  if (!action) return null;
+
+  return <div className="ml-4 flex-shrink-0">{action}</div>;
+}
+
+function CardHeaderContent({
+  title,
+  subtitle,
+}: {
+  title?: string;
+  subtitle?: string;
+}) {
+  if (!title && !subtitle) return null;
+
+  return (
+    <div>
+      {title && (
+        <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
+      )}
+      {subtitle && <p className="text-sm text-gray-500 mt-1.5">{subtitle}</p>}
+    </div>
+  );
+}
+
 export function Card({
   children,
   className = "",
@@ -29,13 +71,6 @@ export function Card({
   );
 }
 
-export interface CardHeaderProps {
-  title?: string;
-  subtitle?: string;
-  action?: ReactNode;
-  className?: string;
-}
-
 export function CardHeader({
   title,
   subtitle,
@@ -51,29 +86,14 @@ export function CardHeader({
         className
       )}
     >
-      <div>
-        {title && (
-          <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
-        )}
-        {subtitle && <p className="text-sm text-gray-500 mt-1.5">{subtitle}</p>}
-      </div>
-      {action && <div className="ml-4 flex-shrink-0">{action}</div>}
+      <CardHeaderContent title={title} subtitle={subtitle} />
+      <CardHeaderAction action={action} />
     </div>
   );
 }
 
-export interface CardContentProps {
-  children?: ReactNode;
-  className?: string;
-}
-
 export function CardContent({ children, className = "" }: CardContentProps) {
   return <div className={clsx("p-6", className)}>{children}</div>;
-}
-
-export interface CardFooterProps {
-  children?: ReactNode;
-  className?: string;
 }
 
 export function CardFooter({ children, className = "" }: CardFooterProps) {
