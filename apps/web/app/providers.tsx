@@ -15,7 +15,6 @@ export function TRPCProvider({ children }: { children: React.ReactNode }) {
         httpLink({
           transformer: superjson,
           url: `${env.NEXT_PUBLIC_API_URL}/trpc`,
-          // Optional: When using in a browser, you can include credentials
           fetch(url, options) {
             return fetch(url, {
               ...options,

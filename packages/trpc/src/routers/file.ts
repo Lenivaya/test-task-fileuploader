@@ -1,16 +1,10 @@
-import { z } from 'zod'
+import { createFileSchema, deleteFileSchema } from '@repo/schema'
 import { TRPCError } from '@trpc/server'
-import {
-  createFileSchema,
-  deleteFileSchema,
-  FileInput,
-  FileStatusEnum
-} from '@repo/schema'
-import { publicProcedure, router } from '../server/trpc'
-import prisma from '../prisma'
-import { deleteFileFromS3, uploadFileToS3 } from '../services/s3'
-import { kafkaService } from '../services/kafka'
 import { logger } from '../logger'
+import prisma from '../prisma'
+import { publicProcedure, router } from '../server/trpc'
+import { kafkaService } from '../services/kafka'
+import { deleteFileFromS3, uploadFileToS3 } from '../services/s3'
 
 export const fileRouter = router({
   // Get all files
@@ -21,6 +15,7 @@ export const fileRouter = router({
       }
     })
     logger.debug({ count: files.length }, 'Retrieved files')
+    console.log(files)
     return files
   }),
 
@@ -60,7 +55,8 @@ export const fileRouter = router({
             s3Key,
             size,
             mimeType: type,
-            status: 'READY'
+            status: 'READY',
+            createdAt: new Date()
           }
         })
 

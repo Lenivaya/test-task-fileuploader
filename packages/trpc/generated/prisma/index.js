@@ -26,7 +26,7 @@ const {
   Public,
   getRuntime,
   createParam,
-} = require('./runtime/client.js')
+} = require('./runtime/library.js')
 
 
 const Prisma = {}
@@ -135,11 +135,11 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/leniviy/code/Projects/testovoe/apps/api/generated/prisma",
+      "value": "/home/leniviy/code/Projects/testovoe/packages/trpc/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
-      "engineType": "client"
+      "engineType": "library"
     },
     "binaryTargets": [
       {
@@ -148,11 +148,8 @@ const config = {
         "native": true
       }
     ],
-    "previewFeatures": [
-      "driverAdapters",
-      "queryCompiler"
-    ],
-    "sourceFilePath": "/home/leniviy/code/Projects/testovoe/apps/api/schema.prisma",
+    "previewFeatures": [],
+    "sourceFilePath": "/home/leniviy/code/Projects/testovoe/packages/trpc/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -166,16 +163,17 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://postgres:postgres@localhost:5432/filemanagement"
+        "value": null
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider        = \"prisma-client-js\"\n  previewFeatures = [\"queryCompiler\", \"driverAdapters\"]\n  output          = \"./generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum FileStatus {\n  PENDING\n  READY\n  ERROR\n}\n\nmodel File {\n  id           String     @id @default(uuid())\n  name         String // Display name for users\n  originalName String // Original filename from upload\n  url          String // Public S3 URL\n  s3Key        String // S3 object key\n  size         Int\n  mimeType     String\n  status       FileStatus @default(PENDING)\n\n  // Timestamps\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([createdAt]) // For sorting by creation date\n  @@map(\"files\")\n}\n",
-  "inlineSchemaHash": "056b58b594ef4d1554efcea5989ea3157abe47d14ea224ca9780b6dcb6540537",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum FileStatus {\n  PENDING\n  READY\n  ERROR\n}\n\nmodel File {\n  id           String     @id @default(uuid())\n  name         String // Display name for users\n  originalName String // Original filename from upload\n  url          String // Public S3 URL\n  s3Key        String // S3 object key\n  size         Int\n  mimeType     String\n  status       FileStatus @default(PENDING)\n\n  // Timestamps\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([createdAt]) // For sorting by creation date\n  @@map(\"files\")\n}\n",
+  "inlineSchemaHash": "68b28ce6e8fcf36395e14cd47283a622f338e5a72f3cc7ecde6e58afe7ec97a1",
   "copyEngine": true
 }
 
@@ -196,21 +194,13 @@ if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
   config.isBundled = true
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"File\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"originalName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"s3Key\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"size\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"mimeType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"FileStatus\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"files\"}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"File\":{\"dbName\":\"files\",\"schema\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"String\",\"nativeType\":null,\"default\":{\"name\":\"uuid\",\"args\":[4]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"name\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"originalName\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"url\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"s3Key\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"size\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"mimeType\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"status\",\"kind\":\"enum\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"FileStatus\",\"nativeType\":null,\"default\":\"PENDING\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"DateTime\",\"nativeType\":null,\"default\":{\"name\":\"now\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"DateTime\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":true}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false}},\"enums\":{\"FileStatus\":{\"values\":[{\"name\":\"PENDING\",\"dbName\":null},{\"name\":\"READY\",\"dbName\":null},{\"name\":\"ERROR\",\"dbName\":null}],\"dbName\":null}},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = undefined
-config.compilerWasm = {
-      getRuntime: async () => require('./query_compiler_bg.js'),
-      getQueryCompilerWasmModule: async () => {
-        const queryCompilerWasmFilePath = require('path').join(config.dirname, 'query_compiler_bg.wasm')
-        const queryCompilerWasmFileBytes = require('fs').readFileSync(queryCompilerWasmFilePath)
-
-        return new WebAssembly.Module(queryCompilerWasmFileBytes)
-      }
-    }
+config.compilerWasm = undefined
 
 
-const { warnEnvConflicts } = require('./runtime/client.js')
+const { warnEnvConflicts } = require('./runtime/library.js')
 
 warnEnvConflicts({
     rootEnvPath: config.relativeEnvPaths.rootEnvPath && path.resolve(config.dirname, config.relativeEnvPaths.rootEnvPath),
@@ -221,6 +211,9 @@ const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
+path.join(process.cwd(), "generated/prisma/libquery_engine-debian-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "generated/prisma/schema.prisma")

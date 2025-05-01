@@ -27,18 +27,6 @@ export function FileList() {
 
   const files = filesQuery.data || []
 
-  const formatDate = (dateString: string | Date) => {
-    try {
-      const date =
-        typeof dateString === 'string' ? parseISO(dateString) : dateString
-      return format(date, 'PPP p') // Example: April 29, 2023, 1:25 PM
-    } catch (error) {
-      return 'Date unavailable'
-    }
-  }
-
-  console.log(files)
-
   return (
     <div className='p-4'>
       <h2 className='text-xl font-semibold mb-4'>Files</h2>
@@ -55,7 +43,7 @@ export function FileList() {
               <div>
                 <div className='font-medium'>{file.name}</div>
                 <div className='text-sm text-gray-500'>
-                  Uploaded on {formatDate(file.createdAt)}
+                  Uploaded on {format(file.createdAt, 'PPP p')}
                 </div>
               </div>
 

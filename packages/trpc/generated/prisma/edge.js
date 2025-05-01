@@ -134,11 +134,11 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/leniviy/code/Projects/testovoe/apps/api/generated/prisma",
+      "value": "/home/leniviy/code/Projects/testovoe/packages/trpc/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
-      "engineType": "client"
+      "engineType": "library"
     },
     "binaryTargets": [
       {
@@ -147,11 +147,8 @@ const config = {
         "native": true
       }
     ],
-    "previewFeatures": [
-      "driverAdapters",
-      "queryCompiler"
-    ],
-    "sourceFilePath": "/home/leniviy/code/Projects/testovoe/apps/api/schema.prisma",
+    "previewFeatures": [],
+    "sourceFilePath": "/home/leniviy/code/Projects/testovoe/packages/trpc/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -165,16 +162,17 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://postgres:postgres@localhost:5432/filemanagement"
+        "value": null
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider        = \"prisma-client-js\"\n  previewFeatures = [\"queryCompiler\", \"driverAdapters\"]\n  output          = \"./generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum FileStatus {\n  PENDING\n  READY\n  ERROR\n}\n\nmodel File {\n  id           String     @id @default(uuid())\n  name         String // Display name for users\n  originalName String // Original filename from upload\n  url          String // Public S3 URL\n  s3Key        String // S3 object key\n  size         Int\n  mimeType     String\n  status       FileStatus @default(PENDING)\n\n  // Timestamps\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([createdAt]) // For sorting by creation date\n  @@map(\"files\")\n}\n",
-  "inlineSchemaHash": "056b58b594ef4d1554efcea5989ea3157abe47d14ea224ca9780b6dcb6540537",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum FileStatus {\n  PENDING\n  READY\n  ERROR\n}\n\nmodel File {\n  id           String     @id @default(uuid())\n  name         String // Display name for users\n  originalName String // Original filename from upload\n  url          String // Public S3 URL\n  s3Key        String // S3 object key\n  size         Int\n  mimeType     String\n  status       FileStatus @default(PENDING)\n\n  // Timestamps\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([createdAt]) // For sorting by creation date\n  @@map(\"files\")\n}\n",
+  "inlineSchemaHash": "68b28ce6e8fcf36395e14cd47283a622f338e5a72f3cc7ecde6e58afe7ec97a1",
   "copyEngine": true
 }
 config.dirname = '/'
