@@ -20,7 +20,8 @@
     "build": "tsup src/index.tsx --format esm,cjs --dts --external react && tailwindcss -i ./src/styles.css -o ./dist/index.css",
     "check-types": "tsc --noEmit",
     "dev": "concurrently \"tsup src/index.tsx --format esm,cjs --dts --external react --watch\" \"tailwindcss -i ./src/styles.css -o ./dist/index.css --watch\"",
-    "lint": "eslint src --max-warnings 0"
+    "lint": "eslint src --max-warnings 0",
+    "format": "prettier --write src"
   },
   "peerDependencies": {
     "react": "^19"
@@ -30,9 +31,9 @@
     "human-format": "^1.2.1"
   },
   "devDependencies": {
+    "@file-uploader/typescript-config": "workspace:*",
     "@file-uplodader/eslint-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
-    "@file-uploader/typescript-config": "workspace:*",
     "@types/date-fns": "^2.6.3",
     "@types/node": "^22.15.3",
     "@types/react": "^19.1.0",
@@ -40,8 +41,11 @@
     "concurrently": "^9.1.2",
     "eslint": "^9.25.0",
     "postcss": "^8.5.3",
+    "prettier": "^3.5.3",
+    "prettier-config-standard": "^7.0.0",
     "tailwindcss": "^3.4.17",
     "tsup": "^8.0.1",
     "typescript": "5.8.2"
-  }
+  },
+  "prettier": "prettier-config-standard"
 }
