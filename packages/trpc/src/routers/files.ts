@@ -1,24 +1,10 @@
-import { File } from '@file-uploader/schema'
+import { File, uploadFilesSchema } from '@file-uploader/schema'
 import { z } from 'zod'
 import { logger } from '../logger'
 import prisma from '../prisma'
 import { publicProcedure, router } from '../server/trpc'
 import { kafkaService } from '../services/kafka'
 import { uploadFileToS3 } from '../services/s3'
-
-const uploadFilesSchema = z.object({
-  files: z.array(
-    z.object({
-      name: z.string().min(1),
-      file: z.object({
-        buffer: z.instanceof(Buffer).optional(),
-        originalname: z.string(),
-        mimetype: z.string(),
-        size: z.number().int().positive()
-      })
-    })
-  )
-})
 
 type FileUploadError = {
   filename: string

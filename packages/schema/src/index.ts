@@ -30,6 +30,18 @@ export const fileInputSchema = z.object({
 
 export type FileInput = z.infer<typeof fileInputSchema>;
 
+// Schema for upload files request
+export const uploadFilesSchema = z.object({
+  files: z.array(
+    z.object({
+      name: z.string().min(1),
+      file: fileInputSchema,
+    })
+  ),
+});
+
+export type UploadFilesInput = z.infer<typeof uploadFilesSchema>;
+
 // Schema for creating a new file
 export const createFileSchema = z.object({
   name: z.string().min(1),
