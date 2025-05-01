@@ -1,21 +1,8 @@
-import {
-  S3Client,
-  ListObjectsV2Command,
-  DeleteObjectCommand
-} from '@aws-sdk/client-s3'
+import { ListObjectsV2Command } from '@aws-sdk/client-s3'
 import prisma from '../prisma'
 import { env } from '../env'
 import { logger } from '../logger'
-
-const s3Client = new S3Client({
-  region: env.S3_REGION,
-  endpoint: env.S3_ENDPOINT,
-  forcePathStyle: true,
-  credentials: {
-    accessKeyId: env.S3_ACCESS_KEY,
-    secretAccessKey: env.S3_SECRET_KEY
-  }
-})
+import { s3Client, deleteFileFromS3 } from '../services/s3'
 
 /**
  * Sync S3 files with database
@@ -43,7 +30,7 @@ export async function syncS3Files(): Promise<void> {
     if (orphanedFiles.length > 0) {
       for (const key of orphanedFiles) {
         logger.debug({ key }, 'Deleting orphaned file')
-        await deleteS3Object(env.S3_BUCKET_NAME, key)
+        await deleteFileFromS3(key)
       }
       logger.info(
         { fileCount: orphanedFiles.length },
@@ -84,16 +71,4 @@ async function listAllS3Objects(bucket: string): Promise<string[]> {
   } while (continuationToken)
 
   return objects
-}
-
-/**
- * Delete an object from S3
- */
-async function deleteS3Object(bucket: string, key: string): Promise<void> {
-  const command = new DeleteObjectCommand({
-    Bucket: bucket,
-    Key: key
-  })
-
-  await s3Client.send(command)
 }
