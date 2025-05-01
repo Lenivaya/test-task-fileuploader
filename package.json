@@ -1,17 +1,20 @@
 {
-  "name": "file-management-platform",
+  "name": "with-tailwind",
   "private": true,
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "check-types": "turbo run check-types",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@turbo/gen": "^1.11.3",
-    "eslint": "^8.56.0",
-    "prettier": "^3.1.1",
-    "turbo": "^1.11.3"
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "turbo": "^2.5.2"
   },
-  "packageManager": "pnpm@10.9.0"
+  "packageManager": "pnpm@8.15.6",
+  "engines": {
+    "node": ">=18"
+  }
 }
