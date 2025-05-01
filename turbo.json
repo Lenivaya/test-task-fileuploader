@@ -18,6 +18,9 @@
     "analyze": {
       "dependsOn": ["^analyze"]
     },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
     "dev": {
       "cache": false,
       "persistent": true

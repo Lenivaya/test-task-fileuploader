@@ -1,3 +1,3 @@
-# `@repo/eslint-config`
+# `@turbo/eslint-config`
 
-Collection of internal ESLint configurations written in TypeScript.
+Collection of internal eslint configurations.
