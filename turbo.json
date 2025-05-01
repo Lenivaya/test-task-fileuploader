@@ -18,6 +18,9 @@
     "analyze": {
       "dependsOn": ["^analyze"]
     },
+    "format": {
+      "dependsOn": ["^format"]
+    },
     "lint": {
       "dependsOn": ["^lint"]
     },
