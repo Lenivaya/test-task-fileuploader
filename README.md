@@ -7,6 +7,10 @@ A mini-platform for managing files, built with a modern stack:
 - Messaging: Kafka
 - Frontend: Next.js + React + Tailwind
 
+## Video example
+
+![Video example](https://github.com/user-attachments/assets/7f896a4f-7f34-4291-b2b2-f59c83fac601)
+
 ## Features
 
 - Upload files to S3-compatible storage with a modern UI
