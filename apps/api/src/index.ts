@@ -4,16 +4,15 @@ import fastify from "fastify";
 import cors from "@fastify/cors";
 import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify";
 import { env } from "./env";
-import { appRouter } from "./server/routers";
-import { kafkaService } from "./services/kafka";
-import { startS3SyncJob } from "./jobs";
-import { logger } from "./logger";
+import { appRouter } from "@file-uploader/trpc";
+import { kafkaService } from "@file-uploader/trpc";
+import { startS3SyncJob } from "@file-uploader/trpc";
+import { logger } from "@file-uploader/trpc";
 
 async function main() {
   // Create Fastify server
   const server = fastify({
     maxParamLength: 5000,
-    logger: false, // Disable Fastify's logger since we're using our own
   });
 
   // Register CORS
