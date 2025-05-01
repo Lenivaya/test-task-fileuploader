@@ -234,6 +234,12 @@ importers:
       '@file-uploader/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      prettier:
+        specifier: ^3.5.3
+        version: 3.5.3
+      prettier-config-standard:
+        specifier: ^7.0.0
+        version: 7.0.0(prettier@3.5.3)
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
