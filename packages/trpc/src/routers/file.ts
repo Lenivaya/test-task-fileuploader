@@ -15,7 +15,6 @@ export const fileRouter = router({
       }
     })
     logger.debug({ count: files.length }, 'Retrieved files')
-    console.log(files)
     return files
   }),
 
@@ -55,8 +54,7 @@ export const fileRouter = router({
             s3Key,
             size,
             mimeType: type,
-            status: 'READY',
-            createdAt: new Date()
+            status: 'READY'
           }
         })
 
