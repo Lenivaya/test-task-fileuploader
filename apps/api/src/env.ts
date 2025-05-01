@@ -1,29 +1,29 @@
-import { createEnv } from "@t3-oss/env-core";
-import { z } from "zod";
+import { createEnv } from '@t3-oss/env-core'
+import { z } from 'zod'
 
 export const env = createEnv({
   server: {
     // Server Configuration
-    HOST: z.string().default("0.0.0.0"),
+    HOST: z.string().default('0.0.0.0'),
     PORT: z
       .string()
       .transform(Number)
       .pipe(z.number().int().positive())
-      .default("3001"),
+      .default('3001'),
 
     LOG_LEVEL: z
-      .enum(["fatal", "error", "warn", "info", "debug", "trace"])
-      .default("info"),
+      .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace'])
+      .default('info'),
     NODE_ENV: z
-      .enum(["development", "production", "test"])
-      .default("development"),
+      .enum(['development', 'production', 'test'])
+      .default('development')
   },
 
   /**
    * The prefix that client-side variables must have. This is enforced both at
    * a type-level and at runtime.
    */
-  clientPrefix: "PUBLIC_",
+  clientPrefix: 'PUBLIC_',
 
   client: {},
 
@@ -46,5 +46,5 @@ export const env = createEnv({
    * In order to solve these issues, we recommend that all new projects
    * explicitly specify this option as true.
    */
-  emptyStringAsUndefined: true,
-});
+  emptyStringAsUndefined: true
+})

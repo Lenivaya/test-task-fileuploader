@@ -72,9 +72,6 @@ importers:
       '@trpc/server':
         specifier: 11.1.2
         version: 11.1.2(typescript@5.8.3)
-      api:
-        specifier: workspace:*
-        version: 'link:'
       dotenv:
         specifier: ^16.5.0
         version: 16.5.0
@@ -100,6 +97,12 @@ importers:
       '@types/node':
         specifier: ^22.15.3
         version: 22.15.3
+      prettier:
+        specifier: ^3.5.3
+        version: 3.5.3
+      prettier-config-standard:
+        specifier: ^7.0.0
+        version: 7.0.0(prettier@3.5.3)
       prisma:
         specifier: 6.7.0
         version: 6.7.0(typescript@5.8.3)
@@ -267,9 +270,6 @@ importers:
       '@trpc/server':
         specifier: 11.1.2
         version: 11.1.2(typescript@5.8.3)
-      api:
-        specifier: workspace:*
-        version: link:../../apps/api
       dotenv:
         specifier: ^16.5.0
         version: 16.5.0
@@ -2392,6 +2392,11 @@ packages:
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
+
+  prettier-config-standard@7.0.0:
+    resolution: {integrity: sha512-NgZy4TYupJR6aMMuV/Aqs0ONnVhlFT8PXVkYRskxREq8EUhJHOddVfBxPV6fWpgcASpJSgvvhVLk0CBO5M3Hvw==}
+    peerDependencies:
+      prettier: ^2.6.0 || ^3.0.0
 
   prettier-plugin-tailwindcss@0.6.11:
     resolution: {integrity: sha512-YxaYSIvZPAqhrrEpRtonnrXdghZg1irNg4qrjboCXrpybLWVs55cW2N3juhspVJiO0JBvYJT8SYsJpc8OQSnsA==}
@@ -5489,6 +5494,10 @@ snapshots:
       xtend: 4.0.2
 
   prelude-ls@1.2.1: {}
+
+  prettier-config-standard@7.0.0(prettier@3.5.3):
+    dependencies:
+      prettier: 3.5.3
 
   prettier-plugin-tailwindcss@0.6.11(prettier@3.5.3):
     dependencies:
