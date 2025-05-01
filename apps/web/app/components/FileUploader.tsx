@@ -2,14 +2,8 @@
 
 import { trpc } from '@file-uploader/trpc/client'
 import { useState } from 'react'
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardContent,
-  FileUploadZone,
-  ProgressBar
-} from '@repo/ui'
+import clsx from 'clsx'
+import { Button, Card, CardHeader, CardContent, FileUploadZone } from '@repo/ui'
 
 export function FileUploader() {
   const [files, setFiles] = useState<File[]>([])
@@ -47,8 +41,8 @@ export function FileUploader() {
     setUploading(true)
 
     try {
-      // Upload each file
-      for (const file of files) {
+      // Create an array of promises for each file upload
+      const uploadPromises = files.map(async (file) => {
         // Convert file to base64 for transfer
         const reader = new FileReader()
 
@@ -81,7 +75,10 @@ export function FileUploader() {
 
         // Set to 100% when upload is complete
         setUploadProgress((prev) => ({ ...prev, [file.name]: 100 }))
-      }
+      })
+
+      // Wait for all uploads to complete
+      await Promise.all(uploadPromises)
     } catch (error) {
       console.error('Upload failed:', error)
     } finally {
@@ -106,61 +103,35 @@ export function FileUploader() {
         <FileUploadZone
           onFilesSelected={handleFilesSelected}
           disabled={uploading}
+          isUploading={uploading}
           maxSizeInMB={10}
+          progress={uploadProgress}
         />
 
-        {files.length > 0 && (
-          <div className='ui-mt-6 ui-space-y-4'>
-            <div className='ui-text-sm ui-text-gray-500 ui-flex ui-items-center'>
+        {files.length > 0 && !uploading && (
+          <Button
+            onClick={handleUpload}
+            disabled={files.length === 0}
+            className='ui-mt-6 ui-w-full ui-transition-transform ui-duration-200 ui-transform hover:ui-scale-105'
+          >
+            <span className='ui-flex ui-items-center ui-justify-center'>
               <svg
-                className='ui-w-5 ui-h-5 ui-mr-2 ui-text-blue-500'
-                xmlns='http://www.w3.org/2000/svg'
-                viewBox='0 0 24 24'
+                className='ui-w-5 ui-h-5 ui-mr-2'
                 fill='none'
                 stroke='currentColor'
-                strokeWidth='2'
-                strokeLinecap='round'
-                strokeLinejoin='round'
+                viewBox='0 0 24 24'
+                xmlns='http://www.w3.org/2000/svg'
               >
-                <path d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'></path>
-                <polyline points='15 3 21 3 21 9'></polyline>
-                <line x1='10' y1='14' x2='21' y2='3'></line>
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12'
+                />
               </svg>
-              {files.length} file{files.length !== 1 ? 's' : ''} selected
-            </div>
-
-            <div className='ui-bg-gray-50 ui-rounded-lg ui-p-4 ui-space-y-3'>
-              {files.map((file, index) => (
-                <div key={index} className='ui-space-y-1'>
-                  <div className='ui-flex ui-justify-between ui-text-sm'>
-                    <span className='ui-truncate ui-max-w-xs ui-font-medium'>
-                      {file.name}
-                    </span>
-                    <span className='ui-text-gray-500'>
-                      ({(file.size / 1024).toFixed(2)} KB)
-                    </span>
-                  </div>
-                  <ProgressBar
-                    progress={uploadProgress[file.name] || 0}
-                    size='sm'
-                    variant={
-                      uploadProgress[file.name] === 100 ? 'success' : 'default'
-                    }
-                    showPercentage={true}
-                  />
-                </div>
-              ))}
-            </div>
-
-            <Button
-              onClick={handleUpload}
-              disabled={files.length === 0 || uploading}
-              isLoading={uploading}
-              className='ui-mt-4 ui-w-full ui-transition-transform ui-duration-200 ui-transform hover:ui-scale-105'
-            >
-              {uploading ? 'Uploading...' : 'Upload Files'}
-            </Button>
-          </div>
+              Upload {files.length} {files.length === 1 ? 'File' : 'Files'}
+            </span>
+          </Button>
         )}
 
         {uploadMutation.isError && (
