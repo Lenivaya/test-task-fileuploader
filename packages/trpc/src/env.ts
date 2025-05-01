@@ -14,7 +14,7 @@ export const env = createEnv({
     KAFKA_BROKERS: z
       .string()
       .default('localhost:29092')
-      .transform((val) => val.split(',')),
+      .transform((val) => val.split(',').map((broker) => broker.trim())),
     KAFKA_CLIENT_ID: z.string().default('file-uploader'),
     // Server Configuration
     HOST: z.string().default('0.0.0.0'),
