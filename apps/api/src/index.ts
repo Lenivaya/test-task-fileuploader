@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 import fastify from "fastify";
 import cors from "@fastify/cors";
 import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify";
@@ -60,12 +62,9 @@ async function main() {
 
 main()
   .catch((err) => {
-    // If error during startup, log and exit
-    // If server is not yet created, can't use server.log
-    // eslint-disable-next-line no-console
     console.error("Fatal error during server startup:", err);
     process.exit(1);
   })
   .then(() => {
-    // Optionally, you can log that main() finished, but server should keep running
+    console.log("Server exited");
   });
