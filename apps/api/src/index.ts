@@ -71,5 +71,5 @@ main()
     process.exit(1);
   })
   .then(() => {
-    logger.info("Server exited");
+    logger.info("Server started ");
   });
